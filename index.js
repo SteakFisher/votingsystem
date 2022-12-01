@@ -17,8 +17,10 @@ app.get('/', async function(request, response) {
 
 // Pass in a unique state string to prevent CSRF attacks, each user is identified by the state u pass in
 getAuthLink("1234")
+// Returns a URL that you can redirect the user to, for them to authenticate with Microsoft
 
 
 // For each unique "state" passed in a new instance is spun up, forcing each user to have a unique state
 // This part MAYBE prone to breaking, so extensive testing is required
 console.log(await getAuthTokens("1234", app))
+// Returns an object with the access token and refresh token
