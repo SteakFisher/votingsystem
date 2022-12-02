@@ -28,15 +28,15 @@ export default function getAuthTokens(state, app) {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded',
-                                'scope': "offline_access user.read mail.read",
+                                'scope': Constants.scope,
                             },
                             body: params
                         })
                             .then(res => res.json())
                             .then(json => {
                                 resolve({
-                                    accessToken: json.access_token,
-                                    refreshToken: json.refresh_token,
+                                    access_token: json.access_token,
+                                    refresh_token: json.refresh_token,
                                 });
                             })
                     }
@@ -46,7 +46,6 @@ export default function getAuthTokens(state, app) {
                 console.log(e)
             }
         })
-        console.log(6)
     })
 }
 

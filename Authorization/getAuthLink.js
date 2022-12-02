@@ -7,7 +7,7 @@ export default function getAuthLink(state) {
     const tenant = process.env.TENANT_ID;
     const client_id = process.env.AZURE_CLIENT_ID;
     const redirect_uri = Constants.authRedirect;
-    const scope = "offline_access user.read mail.read";
+    const scope = Constants.scope;
     const response_type = "code";
     const response_mode = "query";
 

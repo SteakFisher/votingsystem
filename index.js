@@ -2,6 +2,7 @@ import express from "express"
 
 import getAuthLink from "./Authorization/getAuthLink.js";
 import getAuthTokens from "./Authorization/getAuthTokens.js";
+import refreshAccessToken from "./Authorization/refreshAccessToken.js";
 
 let app = express()
 
@@ -22,5 +23,11 @@ getAuthLink("1234")
 
 // For each unique "state" passed in a new instance is spun up, forcing each user to have a unique state
 // This part MAYBE prone to breaking, so extensive testing is required
-console.log(await getAuthTokens("1234", app))
-// Returns an object with the access token and refresh token
+let authObj = await getAuthTokens("1234", app)
+// Returns an object with the access token and refresh token (henceforth referred to as authObj)
+
+
+// This is the part that refreshes the access token
+// Access tokens may expire, so wrap each req in a try catch block and refresh the access token if it fails
+console.log(await refreshAccessToken(authObj, app));
+// Returns an object with the new access token and refresh token
