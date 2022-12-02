@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import Constants from "../Creds/Constants.json" assert {type: "json"};
 
 
-export default function (authObj){
+export default function refreshAccessToken(authObj){
     return new Promise((resolve, reject) => {
         const tenant = process.env.TENANT_ID;
 
