@@ -3,6 +3,7 @@ import express from "express"
 import getAuthLink from "./Authorization/getAuthLink.js";
 import getAuthTokens from "./Authorization/getAuthTokens.js";
 import refreshAccessToken from "./Authorization/refreshAccessToken.js";
+import getUserId from "./MS Graph/getUserId.js";
 
 let app = express()
 
@@ -26,9 +27,13 @@ getAuthLink("1234")
 let authObj = await getAuthTokens("1234", app)
 // Returns an object with the access token and refresh token (henceforth referred to as authObj)
 
+if (!authObj.access_token && authObj.refresh_token) {
+    authObj = await refreshAccessToken(authObj.refresh_token)
+}
 
 // This is the part that refreshes the access token
 // Access tokens may expire, so wrap each req in a try catch block and refresh the access token if it fails
-console.log(await refreshAccessToken(authObj, app));
+console.log(await refreshAccessToken(authObj));
 // Returns an object with the new access token and refresh token
 
+getUserId(authObj)

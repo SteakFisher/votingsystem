@@ -12,7 +12,7 @@ export default function refreshAccessToken(authObj){
         params.append("client_id", process.env.AZURE_CLIENT_ID);
         params.append("client_secret", process.env.AZURE_CLIENT_SECRET);
 
-        fetch(`https://login.microsoftonline.com/${tenant}/oauth2/v2.0/token`, {
+        fetch(`https://graph.microsoft.com/v1.0/me`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
