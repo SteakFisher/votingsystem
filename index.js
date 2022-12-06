@@ -3,7 +3,7 @@ import express from "express"
 import getAuthLink from "./Authorization/getAuthLink.js";
 import getAuthTokens from "./Authorization/getAuthTokens.js";
 import refreshAccessToken from "./Authorization/refreshAccessToken.js";
-import getUserId from "./MS Graph/getUserId.js";
+import getUser from "./MS Graph/getUser.js";
 
 let app = express()
 
@@ -36,4 +36,8 @@ if (!authObj.access_token && authObj.refresh_token) {
 console.log(await refreshAccessToken(authObj));
 // Returns an object with the new access token and refresh token
 
-getUserId(authObj)
+// This is the part that gets the user's Microsoft id (along with other info)
+// Pass in authObj containing the access token
+console.log(await getUser(authObj))
+// Returns an object with the user's Microsoft id, name, email, usageLocation
+
