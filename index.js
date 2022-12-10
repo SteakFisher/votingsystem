@@ -1,24 +1,35 @@
 import express from "express"
-
 import getAuthLink from "./Authorization/getAuthLink.js";
 import getAuthTokens from "./Authorization/getAuthTokens.js";
 import refreshAccessToken from "./Authorization/refreshAccessToken.js";
 import getUser from "./MS Graph/getUser.js";
+import path from "path"
 
 let app = express()
 
 app.set('port', (process.env.PORT || 443))
 
-app.listen(process.env.PORT || 443, function() {
+app.use(express.static('public'))
+
+app.listen(process.env.PORT || 443, function () {
     console.log('App is running, server is listening on port ', app.get('port'));
 })
 
-app.get('/', async function(request, response) {
+app.get('/getLink', (req, res) => {
+    const url = getAuthLink(req.query.state)
+    res.send({ url })
+})
+
+app.get('/home', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'home.html'))
+})
+
+app.get('/', async function (request, response) {
     response.send('hi');
 })
 
 // Pass in a unique state string to prevent CSRF attacks, each user is identified by the state u pass in
-getAuthLink("1234")
+
 // Returns a URL that you can redirect the user to, for them to authenticate with Microsoft
 
 
