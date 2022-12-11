@@ -8,6 +8,7 @@ import refreshAccessToken from "./Authorization/refreshAccessToken.js";
 import getUser from "./Utils/getUser.js";
 import authenticateFirestore from "./Authorization/authenticateFirestore.js";
 import addVote from "./Utils/addVote.js";
+import resetDb from "./Utils/resetDb.js";
 
 let app = express()
 
@@ -41,7 +42,7 @@ const db = authenticateFirestore();
 
 // For each unique "state" passed in a new instance is spun up, forcing each user to have a unique state
 // This part MAYBE prone to breaking, so extensive testing is required
-let authObj = await getAuthTokens("1234", app)
+// let authObj = await getAuthTokens("1234", app)
 // Returns an object with the access token and refresh token (henceforth referred to as authObj)
 
 
@@ -61,6 +62,9 @@ let authObj = await getAuthTokens("1234", app)
 // Contestant should be either contestant A or contestant B
 // User should be the user object returned from getUser
 // Db should also be passed in
-addVote("Mars", "contestant A", await getUser(authObj), db);
+// addVote("Mars", "contestant A", await getUser(authObj), db);
 // void, returns nothing
 
+// This is the part that resets the database
+// Pass in the db
+// await resetDb(db)
