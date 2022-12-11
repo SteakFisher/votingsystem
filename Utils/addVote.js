@@ -1,6 +1,7 @@
 import {FieldValue} from "firebase-admin/firestore";
 
-export default async function addVote(house, contestant, user, doc) {
+export default async function addVote(house, contestant, user, db) {
+    let doc = await db.doc(`Houses/${house}`);
     let data = {}
 
     data[contestant] = [user.email]

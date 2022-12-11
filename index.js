@@ -33,8 +33,6 @@ app.get('/', async function (request, response) {
 })
 
 const db = authenticateFirestore();
-let doc = await db.doc(`Houses/${house}`);
-
 
 // Pass in a unique state string to prevent CSRF attacks, each user is identified by the state u pass in
 
@@ -62,7 +60,7 @@ let authObj = await getAuthTokens("1234", app)
 // House should be the house name with the first letter capitalized, ex: "Mars"
 // Contestant should be either contestant A or contestant B
 // User should be the user object returned from getUser
-// Doc should also be passed in
-addVote("Mars", "contestant A", await getUser(authObj), doc);
+// Db should also be passed in
+addVote("Mars", "contestant A", await getUser(authObj), db);
 // void, returns nothing
 
