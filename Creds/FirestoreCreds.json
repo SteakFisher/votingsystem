@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "school-voting-system",
+  "private_key_id": "55c7f77a36fefa83dd8b7619273bf61f8095af7c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCmin1IeR6rrBdV\nlVwca11pHCexR/0WvFKb8FW3XWdyW2B1SFF6XP++ITMh33X5xxr51+dCXInxIZyo\nPu5J8faOCNj7oy0xIUxOEucsyXNcAsoEJqz3RlRLJHFzEAncMnYK8dT0IGJUgAu8\nC66w+6+y7Yr8O2pzMMqmO3jZQY6+Sf9l9pWJY5JpRGJOA9XgO/bCaKgP9oPAUyaP\nULtBzZIgFh7vIbijD/BqhrOgMh4Agz1pAdVgGd3RU8gxulBMFUCZit3i+i3PtjS+\nPU+LNHabMgSAWD4aubVpxGFVvvM29nGhxEpBfZTkyzipHvMksRkqzPodWMuTSsZw\nigDD473ZAgMBAAECggEABeY6+OG9eeRPMUtop2MQPIRwTYHYz8DdBkQVrTikTPM6\nr/zfUf/QWVpQtt71DWOFq5r/yKSBiGah533PMBRfoPlkQkmt9KMS0mMuCDKcoQJC\nSLJcByhZHQ5N7H8BcmjhMJMPcZRiF08v2znotsE7oJF0jmnGZA0y6H+L0NpXJZtn\nzB3eOLXDwBAmmt7q9hx/cmwoy6+uEHCJvADrCQvHgGpAaBRDdBcwWntx+5nWud4f\nZbdp9fsTLlfSX0Hv5ZcjdK8JwvGv//CPvBe/Okx1nyg1WMjvjfCgoffDWzXjFanh\nVuz6FOsvMh9F1uvySDUz2rcYD8yd1TANmVMfOG0FDwKBgQDTnaWJZ36wPjWl4jZK\nZ10CRaCcjzzXst5n5AKFRChoZTC9W1ltMh/kArES9ey5DjB7HhaMc3UAgif/cx37\nvv0uwJ3xwhYypQ+oY9jlUM4HITU8MMUF/lLaTqI5AAuH9kbaAUdyCvitPtIo85yN\nDMZrgklxahgrrfWcTOeeAinA9wKBgQDJeKAvvfzfUfCc4Wg40aVGiir9ynIhz78p\nBf0ZtagwtgQcrMu1ppHvqRVemy7q5/lofhtYNXnI6u6dH2WP/E0NEfAEHWws1K+E\nLQRGtwsxYTHS17tSQm0UDUAdwF0Y7Yslg+RV4ZRGgUFZkiKakQ3LKl3YVFeoPjnJ\nAG7F1Q2TrwKBgQCbX7mmXIYJc3PCe4hvMtt4ipT1vrnmid+Amko7fSLKG9ogfkz3\nvwDpUgyfpk+MRF3WV+4oa7FxkR87EVPnfoC47hZJ5r6TqtwHQGCFZsIPPBOxQQG4\nd9ZvkaLMhTryNiIpeRzzIBkcYu69wLimW8XoM/4mtsZOc+jNPS4mtuHfWwKBgEVK\no21IHoyAFg0eyUWhdQKJyrd2xUIzvT9Su/X3sFzwfQGPvJBBNbgDo0HihYRtPC5g\nEO+JlNUxV9faUIfw8l8oaDBCHk5c5/DButLHaaYWE5i8ccSc6/8Vf5O78Uj9ifnh\nHssaxnBpTByOUjBu6xuQ+q3IdE18+UrUR0TrPbwpAoGAKUaBvqdQ5MOkCZwLl1dT\nIdEL0D1yWnU1YfuHiMZfPdTtrvgmK1Zff0F45bjYq58vjbkjlX89FzkE3X2zGPyT\nDGa+FrgYP6iMQnlJpg1l7mwwARCwcjBEGisF0E1kSdpu98b8qo1Cf2tkeS/wdgEv\nBp2O7lX8IeVAX+8LXhN9ZAE=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-4e2uz@school-voting-system.iam.gserviceaccount.com",
+  "client_id": "101428110384863111018",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-4e2uz%40school-voting-system.iam.gserviceaccount.com"
+}
