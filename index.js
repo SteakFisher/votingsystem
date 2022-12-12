@@ -29,6 +29,9 @@ app.get('/home', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'public', 'home.html'))
 })
 
+app.get('/vote', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'vote.html'))
+})
 app.get('/', async function (request, response) {
     response.send('hi');
 })
