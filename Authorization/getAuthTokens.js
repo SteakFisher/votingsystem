@@ -7,7 +7,7 @@ dotenv.config()
 
 export default function getAuthTokens(state, app) {
     return new Promise((resolve, reject) => {
-        app.get('/microsoft/auth', async function(request, response) {
+        app.get('/microsoft/auth', async function (request, response) {
             try {
 
                 if (request.url.indexOf('/microsoft/auth') > -1) {
@@ -15,7 +15,7 @@ export default function getAuthTokens(state, app) {
 
                     if (qs.get("state") === state) {
                         const code = qs.get('code')
-                        response.end('Authentication successful! You can now close this window.');
+                        response.redirect('/vote');
 
                         const params = new URLSearchParams();
                         params.append("grant_type", "authorization_code");
