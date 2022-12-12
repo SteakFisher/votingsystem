@@ -20,7 +20,7 @@ export default async function getUser(authObj) {
                 name: json.displayName,
                 email: json.mail,
                 usageLocation: json.usageLocation,
-                state: state
+                state: authObj.state
             }
         })
 }

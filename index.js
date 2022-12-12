@@ -65,7 +65,6 @@ const db = authenticateFirestore();
 // let authObj = await getAuthTokens("1234", app)
 // Returns an object with the access token and refresh token (henceforth referred to as authObj)
 
-
 // This is the part that refreshes the access token
 // Access tokens may expire, so wrap each req in a try catch block and refresh the access token if it fails
 // console.log(await refreshAccessToken(authObj));
@@ -95,6 +94,6 @@ const db = authenticateFirestore();
 
 // This is the part that checks if the user has voted
 // Pass in the user object returned from getUser and the array of emails of users who have voted
-// hasVoted(user, voted, db)
+// console.log(await hasVoted(await getUser(authObj), voted, db))
 // Returns a boolean, true if the user has voted, false if they haven't
 // Feel like I haven't tested properly.. but it should work
