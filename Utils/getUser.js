@@ -19,7 +19,8 @@ export default async function getUser(authObj) {
                 id: json.id,
                 name: json.displayName,
                 email: json.mail,
-                usageLocation: json.usageLocation
+                usageLocation: json.usageLocation,
+                state: state
             }
         })
 }
