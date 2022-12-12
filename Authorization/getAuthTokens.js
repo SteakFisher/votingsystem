@@ -37,6 +37,7 @@ export default function getAuthTokens(state, app) {
                                 resolve({
                                     access_token: json.access_token,
                                     refresh_token: json.refresh_token,
+                                    state: state
                                 });
                             })
                     }
