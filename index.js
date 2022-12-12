@@ -10,6 +10,7 @@ import authenticateFirestore from "./Authorization/authenticateFirestore.js";
 import addVote from "./Utils/addVote.js";
 import resetDb from "./Utils/resetDb.js";
 import hasVoted from "./Utils/hasVoted.js";
+import getHouse from "./Utils/getHouse.js"
 
 let voted = [] // Array of emails of users who have voted
 
@@ -36,7 +37,7 @@ app.get('/getLink', async (req, res) => {
 app.get('/getHouse', (req, res) => {
     const state = req.query.state
     if (state) {
-        const house = "JMNS"// Call function here
+        const house = getHouse(state)// Call function here
         res.send({ house })
     }
     else res.status(400).send('No State Provided')
