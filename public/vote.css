@@ -1,6 +1,9 @@
-* {
+body {
     user-select: none;
+    background-image: url('bg.png');
+
 }
+
 
 .container {
     display: inline-block;
@@ -8,13 +11,17 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    text-align: center;
 }
 
 .submit-button {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 40px;
     display: inline-block;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-size: 35px;
+    border-radius: 10px;
     height: 50px;
+
 }
 
 input[type="radio"] {
@@ -23,7 +30,7 @@ input[type="radio"] {
 
 img {
     height: 250px;
-    border: 10px solid slateblue;
+    border: 10px solid rgb(0, 0, 0);
     border-radius: 20px;
     user-select: none;
     -webkit-user-drag: none;
@@ -37,5 +44,5 @@ label {
 }
 
 input[type="radio"]:checked+label img {
-    border: 10px solid #f00;
+    border: 10px solid rgb(255, 255, 255);
 }
