@@ -20,9 +20,23 @@ app.listen(process.env.PORT || 443, function () {
     console.log('App is running, server is listening on port ', app.get('port'));
 })
 
-app.get('/getLink', (req, res) => {
-    const url = getAuthLink(req.query.state)
-    res.send({ url })
+app.get('/getLink', async (req, res) => {
+    const state = req.query.state
+    if (state) {
+        const url = getAuthLink(state)
+        res.send({ url })
+        await getAuthTokens(state, app)
+    } else res.status(400).send('No State Provided')
+
+})
+
+app.get('/getHouse', (req, res) => {
+    const state = req.query.state
+    if (state) {
+        const house = "JMNS"// Call function here
+        res.send({ house })
+    }
+    else res.status(400).send('No State Provided')
 })
 
 app.get('/home', (req, res) => {
