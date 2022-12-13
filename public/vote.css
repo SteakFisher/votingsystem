@@ -1,7 +1,7 @@
 body {
     user-select: none;
-    background-image: url('bg.png');
-
+    background-image: url('bg.jpg');
+    background-size: 85rem
 }
 
 
@@ -45,4 +45,9 @@ label {
 
 input[type="radio"]:checked+label img {
     border: 10px solid rgb(255, 255, 255);
+}
+
+.submit-button:hover {
+    background-color: rgb(150, 150, 150);
+    border: 1px rgb(150, 150, 150) solid;
 }

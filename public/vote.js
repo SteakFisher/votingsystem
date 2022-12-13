@@ -44,7 +44,7 @@ const submit = () => {
 
             document.body.style.backgroundImage = `linear-gradient(to bottom,
              rgba(${rgbvals[house]}),
-             rgba(${rgbvals[house]})), url('bg.png')`
+             rgba(${rgbvals[house]})), url('bg.jpg')`
 
             const elements = document.getElementsByTagName('img')
             for (const el of elements) {
