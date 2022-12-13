@@ -15,11 +15,11 @@ const enable = () => {
 }
 
 const addVote = (value) => {
-    fetch('', {
+    fetch('/addvote', {
         method: "POST",
         body: {
             state: sessionStorage.state,
-            contestant: ""
+            contestant: `contestant_${value}`
         }
     })
 }

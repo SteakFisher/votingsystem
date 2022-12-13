@@ -29,7 +29,9 @@ app.get('/getLink', async (req, res) => {
     if (state) {
         const url = getAuthLink(state)
         res.send({ url })
-        await getAuthTokens(state, app)
+        let authObj = await getAuthTokens(state, app)
+        // Store AuthObj
+
     } else res.status(400).send('No State Provided')
 
 })
@@ -49,6 +51,20 @@ app.get('/home', (req, res) => {
 
 app.get('/vote', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'public', 'vote.html'))
+})
+app.post('/addvote', async (req, res) => {
+    const { state, contestant } = req.body
+    // Might not want to send house from the client cuz it could be faked
+    if (state && constestant) {
+        let authObj  // Call the function to get the AuthObj from state
+        const house = await getHouse(state)
+        const user = await getUser(authObj)
+        const bool = await hasVoted(user, voted, db)
+        if (!bool) addVote(house, contestant, user, db, voted)
+        else res.status(400).send('Not Again')
+
+
+    } else res.status('400').send('bruh')
 })
 app.get('/', async function (request, response) {
     response.send('hi');
