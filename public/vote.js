@@ -14,16 +14,24 @@ const enable = () => {
     button.disabled = false
 }
 
-const addVote = (value) => {
-    fetch('/addvote', {
+const addVote = async (value) => {
+    // **INSERT LOADING ANIMATION OR SMTHING**
+    // const container = document.querySelector('.container')
+    // console.log(container)
+    // container.remove()
+    const res = await fetch('/addvote', {
         method: "POST",
-        body: {
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
             state: sessionStorage.state,
             contestant: `contestant_${value}`
-        }
+        })
     })
 }
 const submit = () => {
+    const button = document.getElementById('submit')
     const choices = document.getElementsByName('choice')
     for (const choice of choices) {
         if (choice.checked) {
@@ -33,6 +41,8 @@ const submit = () => {
 }
 
 //Code
+
+// Add a check to see if they voted already
 
 (async () => {
 

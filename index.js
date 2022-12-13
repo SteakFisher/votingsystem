@@ -17,6 +17,7 @@ let app = express()
 
 app.set('port', (process.env.PORT || 443))
 
+app.use(express.json())
 app.use(express.static('public'))
 
 app.listen(process.env.PORT || 443, function () {
@@ -55,8 +56,8 @@ app.get('/vote', async (req, res) => {
 })
 
 app.post('/addvote', async (req, res) => {
+
     const { state, contestant } = req.body
-    // Might not want to send house from the client cuz it could be faked
     if (state && contestant) {
         const user = sessionUsers[state]
         const bool = await hasVoted(user, voted, db)
@@ -64,6 +65,7 @@ app.post('/addvote', async (req, res) => {
             const house = await getHouse(user)
             await addVote(house, contestant, user, db, voted)
             delete sessionUsers[state]
+            res.send('Vote Success')
         }
 
         else res.status(400).send('Not Again')
