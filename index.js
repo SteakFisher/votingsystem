@@ -4,14 +4,13 @@ import path from "path"
 
 import getAuthLink from "./Authorization/getAuthLink.js";
 import getAuthTokens from "./Authorization/getAuthTokens.js";
-import refreshAccessToken from "./Authorization/refreshAccessToken.js";
 import getUser from "./Utils/getUser.js";
 import authenticateFirestore from "./Authorization/authenticateFirestore.js";
 import addVote from "./Utils/addVote.js";
-import resetDb from "./Utils/resetDb.js";
 import hasVoted from "./Utils/hasVoted.js";
 import getHouse from "./Utils/getHouse.js"
 
+let sessionUsers = {};
 let voted = [] // Array of emails of users who have voted
 
 let app = express()
@@ -29,8 +28,10 @@ app.get('/getLink', async (req, res) => {
     if (state) {
         const url = getAuthLink(state)
         res.send({ url })
+
         let authObj = await getAuthTokens(state, app)
-        // Store AuthObj
+        sessionUsers[state] = await getUser(authObj)
+        // Store AuthUser
 
     } else res.status(400).send('No State Provided')
 
@@ -49,18 +50,22 @@ app.get('/home', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'public', 'home.html'))
 })
 
-app.get('/vote', (req, res) => {
+app.get('/vote', async (req, res) => {
     res.sendFile(path.join(process.cwd(), 'public', 'vote.html'))
 })
+
 app.post('/addvote', async (req, res) => {
     const { state, contestant } = req.body
     // Might not want to send house from the client cuz it could be faked
-    if (state && constestant) {
-        let authObj  // Call the function to get the AuthObj from state
-        const house = await getHouse(state)
-        const user = await getUser(authObj)
+    if (state && contestant) {
+        const user = sessionUsers[state]
         const bool = await hasVoted(user, voted, db)
-        if (!bool) addVote(house, contestant, user, db, voted)
+        if (!bool) {
+            const house = await getHouse(user)
+            await addVote(house, contestant, user, db, voted)
+            delete sessionUsers[state]
+        }
+
         else res.status(400).send('Not Again')
 
 

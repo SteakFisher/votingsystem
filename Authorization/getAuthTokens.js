@@ -15,7 +15,7 @@ export default function getAuthTokens(state, app) {
 
                     if (qs.get("state") === state) {
                         const code = qs.get('code')
-                        response.redirect('/vote');
+                        response.redirect(`/vote?state=${state}`)
                         response.end();
 
                         const params = new URLSearchParams();
@@ -38,7 +38,6 @@ export default function getAuthTokens(state, app) {
                                 resolve({
                                     access_token: json.access_token,
                                     refresh_token: json.refresh_token,
-                                    state: state
                                 });
                             })
                     }
