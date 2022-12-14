@@ -7,7 +7,7 @@ module.exports = {
     getAuthLink: function (state) {
         const tenant = process.env.TENANT_ID;
         const client_id = process.env.AZURE_CLIENT_ID;
-        const redirect_uri = Constants.authRedirect;
+        const redirect_uri = process.env.AUTH_REDIRECT;
         const scope = Constants.scope;
         const response_type = "code";
         const response_mode = "query";

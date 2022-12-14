@@ -1,4 +1,3 @@
 {
-  "authRedirect": "http://localhost:443/microsoft/auth/",
   "scope": "offline_access user.read"
 }

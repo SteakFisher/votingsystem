@@ -12,7 +12,7 @@ module.exports = {
                 try {
 
                     if (request.url.indexOf('/microsoft/auth') > -1) {
-                        const qs = new URL(request.url, Constants.authRedirect).searchParams;
+                        const qs = new URL(request.url, process.env.AUTH_REDIRECT).searchParams;
 
                         if (qs.get("state") === state) {
                             const code = qs.get('code')
@@ -23,7 +23,7 @@ module.exports = {
                             params.append("grant_type", "authorization_code");
                             params.append("code", code);
                             params.append("client_id", process.env.AZURE_CLIENT_ID);
-                            params.append("redirect_uri", Constants.authRedirect);
+                            params.append("redirect_uri", process.env.AUTH_REDIRECT);
                             params.append("client_secret", process.env.AZURE_CLIENT_SECRET);
 
                             fetch('https://login.microsoftonline.com/common/oauth2/v2.0/token', {
