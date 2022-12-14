@@ -1,14 +1,15 @@
-import express from "express"
-import path from "path"
+const express = require("express")
+const path = require("path")
 
 
-import getAuthLink from "./Authorization/getAuthLink.js";
-import getAuthTokens from "./Authorization/getAuthTokens.js";
-import getUser from "./Utils/getUser.js";
-import authenticateFirestore from "./Authorization/authenticateFirestore.js";
-import addVote from "./Utils/addVote.js";
-import hasVoted from "./Utils/hasVoted.js";
-import getHouse from "./Utils/getHouse.js"
+const { getAuthLink } = require("./Authorization/getAuthLink.js")
+const { getAuthTokens } = require("./Authorization/getAuthTokens.js")
+const { getUser } = require("./Utils/getUser.js")
+const { authenticateFirestore } = require("./Authorization/authenticateFirestore.js")
+const { addVote } = require("./Utils/addVote.js")
+const { hasVoted } = require("./Utils/hasVoted.js")
+const { getHouse } = require("./Utils/getHouse.js")
+
 
 let sessionUsers = {};
 let voted = [] // Array of emails of users who have voted

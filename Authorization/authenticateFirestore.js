@@ -1,12 +1,13 @@
-import { initializeApp, applicationDefault, cert} from "firebase-admin/app";
-import { getFirestore, Timestamp, FieldValue} from "firebase-admin/firestore";
-import serviceAccount from '../Creds/FirestoreCreds.json' assert {type: 'json'};
+const { initializeApp, cert } = require("firebase-admin/app");
+const { getFirestore } = require("firebase-admin/firestore");
+const serviceAccount = require('../Creds/FirestoreCreds.json');
 
-export default function authenticateFirestore() {
+module.exports = {
+    authenticateFirestore: function () {
+        initializeApp({
+            credential: cert(serviceAccount)
+        });
 
-    initializeApp({
-        credential: cert(serviceAccount)
-    });
-
-    return getFirestore();
+        return getFirestore();
+    }
 }

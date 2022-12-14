@@ -1,3 +1,5 @@
-export default function getHouse(user) {
-    return "Jupiter";
+module.exports = {
+    getHouse: function (user) {
+        return "Jupiter";
+    }
 }
