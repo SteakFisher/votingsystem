@@ -26,7 +26,7 @@ const addVote = async (value) => {
         },
         body: JSON.stringify({
             state: sessionStorage.state,
-            contestant: `contestant_${value}`
+            contestant: `contestant ${value}`
         })
     })
 }
