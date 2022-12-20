@@ -1,51 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 * {
     user-select: none;
     -webkit-user-drag: none;
     -webkit-user-select: none;
 }
-
-body {
-    background-size: 85rem;
-    background-image: linear-gradient(to bottom,
-            rgba(51, 35, 35, 0.5),
-            rgba(255, 255, 255, 0.5)), url('bg.jpg');
-    background-repeat: repeat;
-    background-clip: border-box;
-
+.mt-6{
+    margin-top: 6rem;
 }
-
-.button {
-    background-color: rgb(100, 100, 100);
+.mt-7{
+    margin-top: 7rem;
+}
+.mt-10{
+    margin-top: 10rem;
+}
+/* [class*="col"] {
+    border: 2px solid black;
+} */
+/* .arrow-down {
+    width: 0; 
+    height: 0; 
+    border-bottom: 12px solid transparent;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;  
+    border-top: 20px solid white;
+} */
+.font {
+    font-family: 'Bebas Neue', cursive;
     color: white;
-    display: inline-block;
-    padding: 10;
-    border: 1px rgb(100, 100, 100) solid;
-    border-radius: 12px;
+}
+.house{
+    
+    color: white;
+    background : none;
+    border: none;
+    text-underline-offset: 0.15em;
+    text-decoration:underline 0.3rem rgba(255, 255, 255, 0);
+    transition: text-decoration-color 300ms;
+}
+
+.house:hover{    
+    text-decoration-color: rgba(255, 255, 255, 1);
+}
+.selected{
+    
+    text-decoration-color:rgba(255, 255, 255, 1);
+    opacity: 70%;
+}
+.vote{
+    opacity: 90%;
+    color: black;
+    background : white;
+    border: none;
+}
+
+
+
+.overlay {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
+    top: 0;
+    left: 0;
+    z-index: 1;
 
-
-
-}
-
-span {
-    padding: 0 10;
-    width: 360px;
-    height: 40px;
-    font-family: 'Quicksand', Arial, Helvetica, sans-serif;
-    font-size: 30px;
-    font-weight: normal;
-}
-
-.icon {
-    padding: 0 5;
-    width: 25px;
-}
-
-.button:hover {
-    background-color: rgb(150, 150, 150);
-    border: 1px rgb(150, 150, 150) solid;
 }

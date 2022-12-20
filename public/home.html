@@ -1,17 +1,69 @@
 <head>
-    <title>Homepage</title>
-    <link rel="icon" href="oob.png">
-    <link rel="stylesheet" href="./home.css">
-    <script type="text/javascript" src="./home.js"></script>
+	<title>Homepage</title>
+	<link rel="icon" href="oob.png" />
+
+	<link rel="stylesheet" href="./bootstrap.css" />
+	<link rel="stylesheet" href="./home.css" />
+	<script
+		defer
+		type="text/javascript"
+		src="./bootstrap.bundle.js"
+	></script>
+	<script defer type="text/javascript" src="./home.js"></script>
 </head>
 
 <body>
-    <span style="color: white;">
-        OOB VOTING 2023-2024
-    </span>
-    <div onclick="login()" class="button">
-
-        <img class='icon' src="https://cdn-icons-png.flaticon.com/512/732/732221.png">
-        <span onclick="">Login with Microsoft</span>
-    </div>
+	<div class="container-fluid h-100">
+		<div class="row h-100">
+			<div
+                id="left-bg"
+				class="col-6 h-100 p-0"
+				style="background-color: #DE790A"
+			></div>
+			<div
+                id="right-bg"
+				class="col-6 h-100"
+				style="background: linear-gradient(45deg, black, #5d2801)"
+			></div>
+		</div>
+	</div>
+	<div class="container-fluid overlay">
+		<div class="row mt-7">
+			<div class="col text-center">
+				<h1 class="display-1 m-0 font">VOTING SEASON IS HERE!</h1>
+			</div>
+		</div>
+		<div
+			class="row justify-content-center text-center font mt-6 display-4"
+		>
+			<div class="col-lg-2">
+                <button class="house" onclick="house(this)" id="Jupiter">
+					Jupiter
+				</button>
+			</div>
+			<div class="col-lg-2">
+				<button
+					class="house selected" onclick="house(this)" id="Saturn">
+					Saturn
+				</button>
+			</div>
+			<div class="col-lg-2">
+				<button class="house" onclick="house(this)" id="Mars">
+					Mars
+				</button>
+			</div>
+			<div class="col-lg-2">
+				<button class="house" onclick="house(this)" id="Neptune">
+					Neptune
+				</button>
+			</div>
+		</div>
+		<div class="row mt-10">
+			<div class="col text-center display-6">
+				<button class="vote font rounded-pill px-5 text-center" onclick="login()">
+					START VOTING
+				</button>
+			</div>
+		</div>
+	</div>
 </body>
