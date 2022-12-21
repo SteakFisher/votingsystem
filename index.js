@@ -75,6 +75,14 @@ app.get('/', async function (request, response) {
     response.sendFile(path.join(process.cwd(), 'public', 'home.html'))
 })
 
+app.get('/termsofservice', async function (request, response) {
+    response.sendFile(path.join(process.cwd(), 'public', 'termsofservice.html'))
+})
+
+app.get('/privacystatement', async function (request, response) {
+    response.sendFile(path.join(process.cwd(), 'public', 'privacystatement.html'))
+})
+
 const db = authenticateFirestore();
 
 // Pass in a unique state string to prevent CSRF attacks, each user is identified by the state u pass in
