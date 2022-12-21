@@ -84,9 +84,7 @@ app.get('/privacystatement', async function (request, response) {
     response.sendFile(path.join(process.cwd(), 'public', 'privacystatement.html'))
 })
 
-const serviceAccount = await (
-    await fetch(`/etc/secrets/FirestoreCreds.json`)
-).json()
+const serviceAccount = await fetch(`/etc/secrets/FirestoreCreds.json`).json()
 console.log(serviceAccount)
 
 const db = authenticateFirestore(serviceAccount);
