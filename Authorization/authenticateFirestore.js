@@ -1,6 +1,6 @@
 const { initializeApp, cert } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
-const serviceAccount = require('../etc/secrets/FirestoreCreds.json');
+const serviceAccount = require('../Creds/FirestoreCreds.json');
 
 module.exports = {
     authenticateFirestore: function () {
