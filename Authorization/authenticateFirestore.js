@@ -7,7 +7,7 @@ module.exports = {
     authenticateFirestore: async function () {
 
         const serviceAccount = await (
-            await fetch(`/etc/secrets/FirestoreCreds.json`)
+            await fetch(`https://oobvoting.works/etc/secrets/FirestoreCreds.json`)
         ).json()
 
         initializeApp({
