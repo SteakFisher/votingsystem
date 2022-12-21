@@ -84,8 +84,10 @@ app.get('/privacystatement', async function (request, response) {
     response.sendFile(path.join(process.cwd(), 'public', 'privacystatement.html'))
 })
 
+const serviceAccount = await fetch(`/etc/secrets/FirestoreCreds.json`).json()
+console.log(serviceAccount)
 
-const db = authenticateFirestore();
+const db = authenticateFirestore(serviceAccount);
 console.log(db)
 
 // Pass in a unique state string to prevent CSRF attacks, each user is identified by the state u pass in
