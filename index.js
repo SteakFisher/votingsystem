@@ -85,6 +85,7 @@ app.get('/privacystatement', async function (request, response) {
     response.sendFile(path.join(process.cwd(), 'public', 'privacystatement.html'))
 })
 
+
 const db = authenticateFirestore(serviceAccount);
 console.log(db)
 
