@@ -10,7 +10,6 @@ const { addVote } = require("./Utils/addVote.js")
 const { hasVoted } = require("./Utils/hasVoted.js")
 const { getHouse } = require("./Utils/getHouse.js")
 
-const serviceAccount = require('./etc/secrets/FirestoreCreds.json');
 
 
 let sessionUsers = {};
@@ -85,6 +84,10 @@ app.get('/privacystatement', async function (request, response) {
     response.sendFile(path.join(process.cwd(), 'public', 'privacystatement.html'))
 })
 
+const serviceAccount = await (
+    await fetch(`/etc/secrets/FirestoreCreds.json`)
+).json()
+console.log(serviceAccount)
 
 const db = authenticateFirestore(serviceAccount);
 console.log(db)
