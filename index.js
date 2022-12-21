@@ -10,8 +10,6 @@ const { addVote } = require("./Utils/addVote.js")
 const { hasVoted } = require("./Utils/hasVoted.js")
 const { getHouse } = require("./Utils/getHouse.js")
 
-const serviceAccount = require('./etc/secrets/FirestoreCreds.json');
-
 
 let sessionUsers = {};
 let voted = [] // Array of emails of users who have voted
@@ -85,8 +83,7 @@ app.get('/privacystatement', async function (request, response) {
     response.sendFile(path.join(process.cwd(), 'public', 'privacystatement.html'))
 })
 
-const db = authenticateFirestore(serviceAccount);
-console.log(db)
+const db = authenticateFirestore();
 
 // Pass in a unique state string to prevent CSRF attacks, each user is identified by the state u pass in
 // getAuthLink('1234')
