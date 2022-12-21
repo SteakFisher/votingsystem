@@ -2,8 +2,8 @@
 
 const hex = {
     Jupiter: '#0000FF',
-    Mars: '#D60301',
-    Saturn: '#DE790A',
+    Mars: '#FF0000',
+    Saturn: '#FF8A00',
     Neptune: '#228B22',
 }
 
@@ -12,8 +12,9 @@ const house = (button) => {
     const previous = document.querySelector('.selected')
     previous.classList.remove('selected')
     button.classList.add('selected')
-    document.querySelector('#left-bg').style.backgroundColor = `${hex[house]}`
-    document.querySelector('#right-bg').style.background = `linear-gradient(45deg, black, ${hex[house]})`
+    document.body.style.background = `conic-gradient(from 180deg at 50% 50%, ${hex[house]} 0deg, #130000 360deg)`
+    // document.querySelector('#left-bg').style.backgroundColor = `${hex[house]}`
+    // document.querySelector('#right-bg').style.background = `linear-gradient(45deg, black, ${hex[house]})`
 
 
 }

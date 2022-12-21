@@ -48,9 +48,6 @@ app.get('/getHouse', (req, res) => {
     else res.status(400).send('No State Provided')
 })
 
-app.get('/home', (req, res) => {
-    res.sendFile(path.join(process.cwd(), 'public', 'home.html'))
-})
 
 app.get('/vote', async (req, res) => {
     res.sendFile(path.join(process.cwd(), 'public', 'vote.html'))
@@ -75,7 +72,7 @@ app.post('/addvote', async (req, res) => {
     } else res.status('400').send('bruh')
 })
 app.get('/', async function (request, response) {
-    response.send('hi');
+    res.sendFile(path.join(process.cwd(), 'public', 'home.html'))
 })
 
 const db = authenticateFirestore();

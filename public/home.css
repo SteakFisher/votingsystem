@@ -5,6 +5,9 @@
     -webkit-user-drag: none;
     -webkit-user-select: none;
 }
+body{
+    background: conic-gradient(from 180deg at 50% 50%, #FF8A00 0deg, #130000 360deg);
+}
 .mt-6{
     margin-top: 6rem;
 }
@@ -55,11 +58,3 @@
 }
 
 
-
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-
-}
