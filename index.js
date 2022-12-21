@@ -83,6 +83,10 @@ app.get('/privacystatement', async function (request, response) {
     response.sendFile(path.join(process.cwd(), 'public', 'privacystatement.html'))
 })
 
+app.get('/.well-known/microsoft-identity-association.json', async function (request, response) {
+    response.sendFile(path.join(process.cwd(), 'public', 'microsoft-identity-association.json'))
+})
+
 const db = authenticateFirestore();
 
 // Pass in a unique state string to prevent CSRF attacks, each user is identified by the state u pass in
