@@ -84,7 +84,7 @@ app.get('/privacystatement', async function (request, response) {
 })
 
 const db = authenticateFirestore();
-console.log(db)'
+console.log(db)
 
 // Pass in a unique state string to prevent CSRF attacks, each user is identified by the state u pass in
 // getAuthLink('1234')
