@@ -72,7 +72,7 @@ app.post('/addvote', async (req, res) => {
     } else res.status('400').send('bruh')
 })
 app.get('/', async function (request, response) {
-    res.sendFile(path.join(process.cwd(), 'public', 'home.html'))
+    response.sendFile(path.join(process.cwd(), 'public', 'home.html'))
 })
 
 const db = authenticateFirestore();
