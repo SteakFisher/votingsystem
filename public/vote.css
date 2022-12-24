@@ -1,53 +1,47 @@
-body {
-    user-select: none;
-    background-image: url('bg.jpg');
-    background-size: 85rem
-}
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 
-.container {
-    display: inline-block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-}
-
-.submit-button {
-    display: inline-block;
-    font-family: "Roboto", sans-serif;
-    font-weight: 400;
-    font-size: 35px;
-    border-radius: 10px;
-    height: 50px;
-
-}
-
-input[type="radio"] {
-    display: none;
-}
-
-img {
-    height: 250px;
-    border: 10px solid rgb(0, 0, 0);
-    border-radius: 20px;
+* {
     user-select: none;
     -webkit-user-drag: none;
     -webkit-user-select: none;
-    cursor: pointer;
 }
 
-label {
-    display: inline-block;
-    margin: 20px;
+body {
+    background: conic-gradient(from 180deg at 50% 50%, #FF8A00 0deg, #130000 360deg);
 }
 
-input[type="radio"]:checked+label img {
-    border: 10px solid rgb(255, 255, 255);
+img{
+    width: 25rem;
+    cursor:pointer;
+    
 }
 
-.submit-button:hover {
-    background-color: rgb(150, 150, 150);
-    border: 1px rgb(150, 150, 150) solid;
+.font {
+    font-family: 'Bebas Neue', cursive;    
+    font-size: 3rem;
+   
 }
+
+input[type='radio']{
+    display: none;
+}
+
+input[type='radio']:checked + label  img {
+    border: 10px solid black;
+}
+.submit{
+    color: black;
+    background : white;
+    border: none;
+    width:15rem;
+    height: 4.5rem;
+        
+
+}
+.submit:disabled {
+    opacity: 20%;
+}
+.submit:enabled {
+    opacity: 90%;
+    }

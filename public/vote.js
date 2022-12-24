@@ -1,24 +1,22 @@
+// const state = sessionStorage.state
+// if (!state) location = '/home'
 
-const state = sessionStorage.state
-if (!state) location = '/home'
-
-const rgbvals = {
-    "Jupiter": "0, 0, 255, 0.5",
-    "Neptune": "0, 121, 0, 0.5",
-    "Mars": "200, 0, 0, 0.5",
-    "Saturn": "255, 255, 0, 0.5",
-
+const hex = {
+    Jupiter: '#0000FF',
+    Mars: '#FF0000',
+    Saturn: '#FF8A00',
+    Neptune: '#228B22',
 }
+
 const enable = () => {
-    const button = document.getElementById('submit')
-    button.disabled = false
+    document.querySelector('.submit').disabled = false
 }
 
 const addVote = async (value) => {
-    // **INSERT LOADING ANIMATION OR SMTHING**
-    // const container = document.querySelector('.container')
-    // console.log(container)
-    // container.remove()
+
+    document.querySelector('.font').remove()  // Remove Submit Text
+    document.querySelector('.spinner-border').style = 'display:'
+
     const res = await fetch('/addvote', {
         method: "POST",
         headers: {
@@ -30,13 +28,10 @@ const addVote = async (value) => {
         })
     })
 }
-const submit = () => {
-    const button = document.getElementById('submit')
+const submit = async (button) => {
     const choices = document.getElementsByName('choice')
     for (const choice of choices) {
-        if (choice.checked) {
-            addVote(choice.value)
-        }
+        if (choice.checked) addVote(choice.value)
     }
 }
 
@@ -48,23 +43,22 @@ const submit = () => {
 
     //Maybe Add a Check to verify that house exist 
 
-    document.addEventListener('DOMContentLoaded', async () => {
-        try {
-            const { house } = await (await fetch(`/getHouse?state=${state}`)).json()
+    try {
+        const { house } = await (await fetch(`/getHouse?state=${state}`)).json()
 
-            document.body.style.backgroundImage = `linear-gradient(to bottom,
+        document.body.style.backgroundImage = `linear-gradient(to bottom,
              rgba(${rgbvals[house]}),
              rgba(${rgbvals[house]})), url('bg.jpg')`
 
-            const elements = document.getElementsByTagName('img')
-            for (const el of elements) {
-                const contestant = el.parentElement.getAttribute('for')
-                el.setAttribute('src', `${house}_Contestant_${contestant}.png`)
+        const elements = document.getElementsByTagName('img')
+        for (const el of elements) {
+            const contestant = el.parentElement.getAttribute('for')
+            el.setAttribute('src', `${house}_Contestant_${contestant}.png`)
 
-            }
-        } catch (error) {
-            console.log(error)
         }
-    })
+    } catch (error) {
+        console.log(error)
+    }
+
 
 })()
