@@ -1,7 +1,7 @@
 // fetch the link as the button is loaded
 
 const hex = {
-    Jupiter: '#0000FF',
+    Jupiter: '#0077ff',
     Mars: '#FF0000',
     Saturn: '#FF8A00',
     Neptune: '#228B22',

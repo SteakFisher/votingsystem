@@ -72,7 +72,19 @@ app.post('/addvote', async (req, res) => {
     } else res.status('400').send('bruh')
 })
 app.get('/', async function (request, response) {
-    res.sendFile(path.join(process.cwd(), 'public', 'home.html'))
+    response.sendFile(path.join(process.cwd(), 'public', 'home.html'))
+})
+
+app.get('/termsofservice', async function (request, response) {
+    response.sendFile(path.join(process.cwd(), 'public', 'termsofservice.html'))
+})
+
+app.get('/privacystatement', async function (request, response) {
+    response.sendFile(path.join(process.cwd(), 'public', 'privacystatement.html'))
+})
+
+app.get('/.well-known/microsoft-identity-association.json', async function (request, response) {
+    response.sendFile(path.join(process.cwd(), 'public', 'microsoft-identity-association.json'))
 })
 
 const db = authenticateFirestore();
