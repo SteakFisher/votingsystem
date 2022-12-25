@@ -8,11 +8,10 @@
 }
 
 body {
-    background: conic-gradient(from 180deg at 50% 50%, #FF8A00 0deg, #130000 360deg);
+    background: conic-gradient(from 180deg at 50% 50%, #ffffff 0deg, #130000 360deg);
 }
 
 img{
-    width: 25rem;
     cursor:pointer;
     
 }

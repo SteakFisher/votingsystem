@@ -1,21 +1,41 @@
 // const state = sessionStorage.state
 // if (!state) location = '/home'
 
+const submitbutton = `<button class=" rounded-pill px-5 pt-1 text-center submit"  onclick="submit(this)" disabled>
+<span class="font">Submit</span></button>`
+
 const hex = {
     Jupiter: '#0000FF',
     Mars: '#FF0000',
     Saturn: '#FF8A00',
     Neptune: '#228B22',
 }
+const codes = {
+    200: 'alert-success',
+    403: 'alert-danger',
+    500: 'alert-warning'
+}
 
 const enable = () => {
     document.querySelector('.submit').disabled = false
 }
-
+const createLoadingDiv = () => {
+    const div = document.createElement('div')
+    div.classList.add('spinner-border', 'text-light')
+    div.style = 'width: 3rem; height: 3rem;'
+    div.role = 'status'
+    return div
+}
+const createAlertDiv = (msg, code) => {
+    const div = document.createElement('div')
+    div.classList.add('alert', `${codes[code]}`)
+    div.innerText = msg
+    return div
+}
 const addVote = async (value) => {
 
-    document.querySelector('.font').remove()  // Remove Submit Text
-    document.querySelector('.spinner-border').style = 'display:'
+    const statediv = document.querySelector('#state')
+    const loadingdiv = statediv.appendChild(createLoadingDiv())
 
     const res = await fetch('/addvote', {
         method: "POST",
@@ -23,39 +43,44 @@ const addVote = async (value) => {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            state: sessionStorage.state,
-            contestant: `contestant ${value}`
+            state: 3242342,
+            contestant: `contestant A`
         })
     })
+    const msg = await res.text()
+
+    loadingdiv.remove()
+    statediv.appendChild(createAlertDiv(msg, res.status))
+
 }
 const submit = async (button) => {
     const choices = document.getElementsByName('choice')
     for (const choice of choices) {
+        button.remove()
         if (choice.checked) addVote(choice.value)
     }
 }
 
-//Code
-
-// Add a check to see if they voted already
-
 (async () => {
 
-    //Maybe Add a Check to verify that house exist 
+    const statediv = document.querySelector('#state')
+
 
     try {
-        const { house } = await (await fetch(`/getHouse?state=${state}`)).json()
+        const res = await fetch(`/getHouse?state=${state}`)
+        const data = await res.json()
 
-        document.body.style.backgroundImage = `linear-gradient(to bottom,
-             rgba(${rgbvals[house]}),
-             rgba(${rgbvals[house]})), url('bg.jpg')`
+        if (!data.house) return statediv.appendChild(createAlertDiv(data.msg, 403))
+
+        document.body.style.background = `conic-gradient(from 180deg at 50% 50%, ${hex[data.house]} 0deg, #130000 360deg)`
 
         const elements = document.getElementsByTagName('img')
         for (const el of elements) {
             const contestant = el.parentElement.getAttribute('for')
-            el.setAttribute('src', `${house}_Contestant_${contestant}.png`)
+            el.setAttribute('src', `./Contestants/${data.house}_Contestant_${contestant}.png`) // have a feeling something is wrong in this idk
 
         }
+        statediv.innerHTML = submitbutton
     } catch (error) {
         console.log(error)
     }
