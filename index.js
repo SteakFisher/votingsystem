@@ -10,7 +10,6 @@ const { addVote } = require("./Utils/addVote.js")
 const { hasVoted } = require("./Utils/hasVoted.js")
 const { getHouse } = require("./Utils/getHouse.js")
 
-
 let sessionUsers = {};
 let voted = [] // Array of emails of users who have voted
 
@@ -39,13 +38,18 @@ app.get('/getLink', async (req, res) => {
 
 })
 
-app.get('/getHouse', (req, res) => {
+app.get('/getHouse', async (req, res) => {
     const state = req.query.state
     if (state) {
-        const house = getHouse(state)// Call function here
-        res.send({ house })
+        try {
+            const house = await getHouse(state)
+            res.send({ house })
+        } catch (error) {
+            console.log(error)
+            res.status(500).send({ msg: 'Couldnt Fetch House' })
+        }
     }
-    else res.status(400).send('No State Provided')
+    else res.status(400).send({ msg: 'No State Provided' })
 })
 
 
@@ -54,22 +58,27 @@ app.get('/vote', async (req, res) => {
 })
 
 app.post('/addvote', async (req, res) => {
-
     const { state, contestant } = req.body
+
     if (state && contestant) {
-        const user = sessionUsers[state]
-        const bool = await hasVoted(user, voted, db)
-        if (!bool) {
-            const house = await getHouse(user)
-            await addVote(house, contestant, user, db, voted)
-            delete sessionUsers[state]
-            res.send('Vote Success')
+        try {
+            const user = sessionUsers[state]
+            const bool = await hasVoted(user, voted, db)
+            if (!bool) {
+                const house = await getHouse(user)
+                await addVote(house, contestant, user, db, voted)
+                delete sessionUsers[state]
+                res.send('Vote Success')
+            }
+
+            else res.status(403).send('Not Again')
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).send('Server errrrrrrr')
         }
 
-        else res.status(400).send('Not Again')
-
-
-    } else res.status('400').send('bruh')
+    } else res.status(400).send('Invalid Body')
 })
 app.get('/', async function (request, response) {
     response.sendFile(path.join(process.cwd(), 'public', 'home.html'))
