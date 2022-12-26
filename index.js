@@ -152,7 +152,7 @@ const db = authenticateFirestore();
 // Structures the data into a format that can be added to the database
 // Pass in the array of objects returned from getData
 // First arg should be Usernames file, 2nd should be House file, data formats defined in the wiki
-// structureData(getData('./Scraper/12C Usernames.xlsx'), getData('./Scraper/12C-Houselist.xls'))
+// let students = structureData(getData('./Scraper/12C Usernames.xlsx'), getData('./Scraper/12C-Houselist.xls'))
 // Returns an array of 2 items, final array of objects and errors
 
 // Adds the user to the database
@@ -165,3 +165,10 @@ const db = authenticateFirestore();
 //     'Class': 12,
 //     'Section': 'C'
 // }, db)
+
+// async function addUsers() {
+//     for (let i = 0; i < students[0].length; i++) {
+//         await addUser(students[0][i], db)
+//     }
+// }
+// addUsers().then(r => console.log('Done'))

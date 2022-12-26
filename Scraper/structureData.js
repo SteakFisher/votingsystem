@@ -20,6 +20,10 @@ module.exports = {
                         'House': houses[j]['House']
                     }
 
+                    if(!data['House']){
+                        data['House'] = 'undefined'
+                    }
+
                     for(const key in data){
                         if(data[key] === undefined){
                             errors.push(data)
@@ -31,7 +35,6 @@ module.exports = {
                 }
             }
         }
-
         return [final, errors]
     }
 }
