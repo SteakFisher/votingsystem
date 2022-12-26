@@ -1,7 +1,7 @@
 // const state = sessionStorage.state
 // if (!state) location = '/home'
 
-const submitbutton = `<button class=" rounded-pill px-5 pt-1 text-center submit"  onclick="submit(this)" disabled>
+const submitbutton = `<button class=" rounded-pill px-5 pt-2 text-center submit display-5"  onclick="submit(this)" disabled>
 <span class="font">Submit</span></button>`
 
 const hex = {

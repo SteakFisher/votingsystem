@@ -18,12 +18,18 @@ img{
 
 .font {
     font-family: 'Bebas Neue', cursive;    
-    font-size: 3rem;
    
 }
 
 input[type='radio']{
     display: none;
+}
+input[type='radio'] + label  img {
+    transition: border 250ms;
+}
+
+input[type='radio'] + label  img:hover {
+    border: 10px solid black;
 }
 
 input[type='radio']:checked + label  img {
@@ -35,6 +41,7 @@ input[type='radio']:checked + label  img {
     border: none;
     width:15rem;
     height: 4.5rem;
+    transition: opacity 250ms;
         
 
 }
