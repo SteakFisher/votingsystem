@@ -157,11 +157,11 @@ const db = authenticateFirestore();
 
 // Adds the user to the database
 // Pass in the user object returned by the structureData function and the db
-addUser({
-    'User': 'Gil',
-    'House': 'Jupiter',
-    'Adm. No.': '2345',
-    'Name': 'Gil',
-    'Class': 12,
-    'Section': 'C'
-}, db)
+// addUser({
+//     'User': 'Gil',
+//     'House': 'Jupiter',
+//     'Adm. No.': '2345',
+//     'Name': 'Gil',
+//     'Class': 12,
+//     'Section': 'C'
+// }, db)
