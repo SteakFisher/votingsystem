@@ -173,4 +173,4 @@ const db = authenticateFirestore();
 // }
 // addUsers().then(r => console.log('Done'))
 
-getHouse('jayadeep.c_oob@gemselearning.com', db)
+// getHouse('jayadeep.c_oob@gemselearning.com', db)
