@@ -10,8 +10,8 @@ const { addVote } = require("./Utils/addVote.js")
 const { hasVoted } = require("./Utils/hasVoted.js")
 const { getHouse } = require("./Utils/getHouse.js")
 const { getData } = require("./Scraper/getData");
-const {structureData} = require("./Scraper/structureData");
-const {addUser} = require("./Utils/addUser");
+const { structureData } = require("./Scraper/structureData");
+const { addUser } = require("./Utils/addUser");
 
 let sessionUsers = {};
 let voted = [] // Array of emails of users who have voted
