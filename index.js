@@ -9,6 +9,9 @@ const { authenticateFirestore } = require("./Authorization/authenticateFirestore
 const { addVote } = require("./Utils/addVote.js")
 const { hasVoted } = require("./Utils/hasVoted.js")
 const { getHouse } = require("./Utils/getHouse.js")
+const { getData } = require("./Scraper/getData");
+const {structureData} = require("./Scraper/structureData");
+const {addUser} = require("./Utils/addUser");
 
 let sessionUsers = {};
 let voted = [] // Array of emails of users who have voted
@@ -140,3 +143,25 @@ const db = authenticateFirestore();
 // console.log(await hasVoted(await getUser(authObj), voted, db))
 // Returns a boolean, true if the user has voted, false if they haven't
 // Feel like I haven't tested properly.. but it should work
+
+
+// Scrapes the excel sheets containing the data of the user, data formats are defined in the wiki
+// getData('./Scraper/12C Usernames.xlsx')
+// Returns an array of objects, each object is a user's data
+
+// Structures the data into a format that can be added to the database
+// Pass in the array of objects returned from getData
+// First arg should be Usernames file, 2nd should be House file, data formats defined in the wiki
+// structureData(getData('./Scraper/12C Usernames.xlsx'), getData('./Scraper/12C-Houselist.xls'))
+// Returns an array of 2 items, final array of objects and errors
+
+// Adds the user to the database
+// Pass in the user object returned by the structureData function and the db
+addUser({
+    'User': 'Gil',
+    'House': 'Jupiter',
+    'Adm. No.': '2345',
+    'Name': 'Gil',
+    'Class': 12,
+    'Section': 'C'
+}, db)
