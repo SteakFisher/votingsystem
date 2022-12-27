@@ -28,16 +28,16 @@ app.listen(process.env.PORT || 443, function () {
 })
 
 app.get('/getLink', async (req, res) => {
+
     const state = req.query.state
-    if (state) {
+    const redirect = req.query.redirect
+    if (state && redirect) {
         const url = getAuthLink(state)
         res.send({ url })
 
-        let authObj = await getAuthTokens(state, app)
-        sessionUsers[state] = await getUser(authObj)
-        // Store AuthUser
+        await getAuthTokens(state, app, redirect, sessionUsers)
 
-    } else res.status(400).send('No State Provided')
+    } else res.status(400).send('No State/Redirect Provided')
 
 })
 

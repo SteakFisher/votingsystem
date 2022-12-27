@@ -2,11 +2,11 @@ const fetch = require('node-fetch');
 
 const dotenv = require('dotenv');
 const Constants = require('../Creds/Constants.json');
-
+const { getUser } = require("../Utils/getUser")
 dotenv.config()
 
 module.exports = {
-    getAuthTokens: function (state, app) {
+    getAuthTokens: function (state, app, redirect, sessionUsers) {
         return new Promise((resolve, reject) => {
             app.get('/microsoft/auth', async function (request, response) {
                 try {
@@ -16,8 +16,6 @@ module.exports = {
 
                         if (qs.get("state") === state) {
                             const code = qs.get('code')
-                            response.redirect(`/vote`)
-                            response.end();
 
                             const params = new URLSearchParams();
                             params.append("grant_type", "authorization_code");
@@ -35,7 +33,13 @@ module.exports = {
                                 body: params
                             })
                                 .then(res => res.json())
-                                .then(json => {
+                                .then(async json => {
+                                    sessionUsers[state] = await getUser({
+                                        access_token: json.access_token,
+                                        refresh_token: json.refresh_token,
+                                    })
+                                    response.redirect(`/${redirect}?state=${state}`)
+                                    response.end();
                                     resolve({
                                         access_token: json.access_token,
                                         refresh_token: json.refresh_token,
