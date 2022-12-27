@@ -143,6 +143,28 @@ app.get('/admin/election', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'public', 'election.html'))
 })
 
+app.post('/admin/election', (req, res) => {
+    //Imp Endpoint cant let anyyone touyc
+    const quotes = req.body
+    savedQuotes = quotes
+    fs.writeFile('./public/quotes.json', JSON.stringify(quotes), (err) => {
+        if (err) console.log(err)
+    })
+    const files = req.files
+    const fileKeys = Object.keys(req.files)
+
+    for (const key of fileKeys) {
+        const file = files[key]
+        const dest = path.join(__dirname, 'public', 'Contestants', file.name)
+        file.mv(dest, (err) => {
+            if (err) console.log(err) // Error 
+
+        })
+    }
+
+    res.send('Details Updated')
+})
+
 const db = authenticateFirestore();
 
 // Pass in a unique state string to prevent CSRF attacks, each user is identified by the state u pass in
