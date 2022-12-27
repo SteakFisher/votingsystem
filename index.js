@@ -1,25 +1,32 @@
 const express = require("express")
 const path = require("path")
+const fs = require('fs')
+const cookieParser = require('cookie-parser')
+const fileUpload = require('express-fileupload');
 
 
+const { authMail, cookieSecret } = require('./Creds/Constants.json')
 const { getAuthLink } = require("./Authorization/getAuthLink.js")
 const { getAuthTokens } = require("./Authorization/getAuthTokens.js")
-const { getUser } = require("./Utils/getUser.js")
+
 const { authenticateFirestore } = require("./Authorization/authenticateFirestore.js")
 const { addVote } = require("./Utils/addVote.js")
 const { hasVoted } = require("./Utils/hasVoted.js")
 const { getHouse } = require("./Utils/getHouse.js")
 const { getData } = require("./Scraper/getData");
-const {structureData} = require("./Scraper/structureData");
-const {addUser} = require("./Utils/addUser");
+const { structureData } = require("./Scraper/structureData");
+const { addUser } = require("./Utils/addUser");
 
 let sessionUsers = {};
+let savedQuotes = require('./public/quotes.json') // Quotes of Contestants
 let voted = [] // Array of emails of users who have voted
 
 let app = express()
 
 app.set('port', (process.env.PORT || 443))
 
+app.use(fileUpload());
+app.use(cookieParser(cookieSecret))
 app.use(express.json())
 app.use(express.static('public'))
 
@@ -61,14 +68,14 @@ app.get('/vote', async (req, res) => {
 })
 
 app.post('/addvote', async (req, res) => {
-    const { state, contestant } = req.body
+    const { state, contestant } = req.body // Need to send house aswell
 
     if (state && contestant) {
         try {
             const user = sessionUsers[state]
             const bool = await hasVoted(user, voted, db)
             if (!bool) {
-                const house = await getHouse(user)
+                const house = await getHouse(user)// We dont confirm the house
                 await addVote(house, contestant, user, db, voted)
                 delete sessionUsers[state]
                 res.send('Vote Success')
@@ -97,6 +104,43 @@ app.get('/privacystatement', async function (request, response) {
 
 app.get('/.well-known/microsoft-identity-association.json', async function (request, response) {
     response.sendFile(path.join(process.cwd(), 'public', 'microsoft-identity-association.json'))
+})
+
+let adminState = '' // To Avoid Authencating the state again and again for subpage
+
+app.get('/admin', async (req, res) => {
+    const state = req.query.state
+    if (!state) return res.redirect('/admin/login')
+
+    const user = sessionUsers[state]
+    if (!user) return res.status(500).send('No Session Found')
+    try {
+        console.log(sessionUsers)
+        const mail = user.email
+        console.log(mail)
+        console.log(authMail)
+        if (mail == authMail) {
+            adminState = state
+            res.sendFile(path.join(process.cwd(), 'public', 'admin.html'))
+        }
+        else res.sendStatus(401)
+
+    } catch (error) {
+        res.sendStatus(500)
+        console.log(error)
+    }
+
+})
+
+// Add Cookie Auth check whtever
+app.get('/admin/login', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'login.html'))
+})
+app.get('/admin/house', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'house.html'))
+})
+app.get('/admin/election', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'election.html'))
 })
 
 const db = authenticateFirestore();
@@ -153,6 +197,7 @@ const db = authenticateFirestore();
 // Pass in the array of objects returned from getData
 // First arg should be Usernames file, 2nd should be House file, data formats defined in the wiki
 // let students = structureData(getData('./Scraper/12C Usernames.xlsx'), getData('./Scraper/12C-Houselist.xls'))
+//  structureData(getData('./Scraper/12C Usernames.xlsx'), getData('./Scraper/12C-Houselist.xls'))
 // Returns an array of 2 items, final array of objects and errors
 
 // Adds the user to the database
