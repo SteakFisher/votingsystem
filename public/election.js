@@ -19,7 +19,7 @@ const addElements = () => {
 
                 </div>
                 <div class="input-group mb-3">
-                    <input class="form-control" type="file" id="${house}_Contestant_A_logo" required accept=".png"  id="inputGroupFile03" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
+                    <input class="form-control" type="file" id="${house}_Contestant_A_logo" required accept=".png" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
                 </div>
 
                 <h3 class="mt-4">Contestant B</h3>
@@ -27,7 +27,7 @@ const addElements = () => {
                     <input class="form-control" type="text" id="${house}_Contestant_B_quote"  required placeholder="Quote" aria-label="Username" aria-describedby="addon-wrapping">
                 </div>
                 <div class="input-group mb-3">
-                    <input class="form-control" type="file" id="${house}_Contestant_B_logo"  required accept=".png"  id="inputGroupFile03" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
+                    <input class="form-control" type="file" id="${house}_Contestant_B_logo"  required accept=".png"   aria-label="Upload">
                 </div>
 
     `
