@@ -1,5 +1,8 @@
 {
   "scope": "offline_access user.read",
   "cookieSecret": "'73b6997c915ddab1ca6683f5908c3bf4fcf37b3c'",
-  "authMail": "gilchris.t_oob@gemselearning.com"
+  "admins": [
+    "gilchris.t_oob@gemselearning.com",
+    "jayadeep.c_oob@gemselearning.com"
+  ]
 }
