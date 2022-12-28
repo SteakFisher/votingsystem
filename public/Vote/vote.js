@@ -80,7 +80,7 @@ const submit = async (button) => {
         const elements = document.getElementsByTagName('img')
         for (const el of elements) {
             const contestant = el.parentElement.getAttribute('for')
-            el.setAttribute('src', `./Contestants/${data.house}_Contestant_${contestant}.png`) // have a feeling something is wrong in this idk
+            el.setAttribute('src', `/Contestants/${data.house}_Contestant_${contestant}.png`) // have a feeling something is wrong in this idk
 
         }
         statediv.innerHTML = submitbutton
