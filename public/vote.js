@@ -1,5 +1,5 @@
 const state = sessionStorage.state
-if (!state) location = '/home'
+if (!state) location = '/'
 
 const submitbutton = `<button class=" rounded-pill px-5 pt-2 text-center submit display-5"  onclick="submit(this)" disabled>
 <span class="font">Submit</span></button>`
@@ -64,14 +64,17 @@ const submit = async (button) => {
 (async () => {
 
     const statediv = document.getElementById('state')
-
+    const quoteA = document.getElementById('quoteA')
+    const quoteB = document.getElementById('quoteB')
 
     try {
         const res = await fetch(`/getHouse?state=${state}`)
         const data = await res.json()
 
-        if (!data.house) return statediv.appendChild(createAlertDiv(data.msg, 403))
+        if (!data.house) return statediv.appendChild(createAlertDiv(data.error, 403))
 
+        quoteA.innerText = data.quoteA
+        quoteB.innerText = data.quoteB
         document.body.style.background = `conic-gradient(from 180deg at 50% 50%, ${hex[data.house]} 0deg, #130000 360deg)`
 
         const elements = document.getElementsByTagName('img')
