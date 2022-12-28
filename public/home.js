@@ -13,8 +13,6 @@ const house = (button) => {
     previous.classList.remove('selected')
     button.classList.add('selected')
     document.body.style.background = `conic-gradient(from 180deg at 50% 50%, ${hex[house]} 0deg, #130000 360deg)`
-    // document.querySelector('#left-bg').style.backgroundColor = `${hex[house]}`
-    // document.querySelector('#right-bg').style.background = `linear-gradient(45deg, black, ${hex[house]})`
 
 
 }
@@ -22,7 +20,7 @@ const login = async () => {
     const state = Math.floor(Math.random() * 9999999)
     sessionStorage.state = state
     const { url } = await (
-        await fetch(`/getLink?state=${state}`)
+        await fetch(`/getLink?state=${state}&redirect=vote`)
     ).json()
     location = url
 }
