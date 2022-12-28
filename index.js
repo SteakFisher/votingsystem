@@ -26,7 +26,7 @@ let app = express()
 
 app.set('port', (process.env.PORT || 443))
 
-app.use(fileUpload());
+app.use(fileUpload({ useTempFiles: true }));
 app.use(cookieParser(cookieSecret))
 app.use(express.json())
 app.use(express.static('public'))
@@ -140,6 +140,33 @@ app.get('/admin/house', (req, res) => {
     if (!adminStates.includes(state)) return res.sendStatus(403)
     res.sendFile(path.join(process.cwd(), 'public', 'house.html'))
 })
+app.post('/admin/house', async (req, res) => {
+    const state = req.state
+    if (!state) return res.sendStatus(401)
+    if (!adminStates.includes(state)) return res.sendStatus(403)
+
+    const files = req.files
+
+    const fileKeys = Object.keys(req.files)
+
+    for (const key of fileKeys) {
+        const file = files[key]
+        const dest = path.join(__dirname, 'Scraper', file.name)
+        file.mv(dest, (err) => {
+            if (err) console.log(err) // Error 
+        })
+    }
+    const [students, errors] = structureData(getData(`./Scraper/${files.usernames.name}`),
+        getData(`./Scraper/${files.houselist.name}`))
+
+    res.send({ msg: 'Works', errors })
+    for (const student of students) {
+        await addUser(student)
+    }
+
+
+
+})
 app.get('/admin/reset', (req, res) => {
     const state = req.signedCookies.state
     if (!state) return res.sendStatus(401)
@@ -185,12 +212,13 @@ app.post('/admin/election', (req, res) => {
         const dest = path.join(__dirname, 'public', 'Contestants', file.name)
         file.mv(dest, (err) => {
             if (err) console.log(err) // Error 
-
         })
     }
 
     res.send('Details Updated')
 })
+
+
 
 const db = authenticateFirestore();
 
