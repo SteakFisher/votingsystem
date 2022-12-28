@@ -34,7 +34,7 @@ const createAlertDiv = (msg, code) => {
 }
 const addVote = async (value) => {
 
-    const statediv = document.querySelector('#state')
+    const statediv = document.getElementById('state')
     const loadingdiv = statediv.appendChild(createLoadingDiv())
 
     const res = await fetch('/addvote', {
@@ -63,7 +63,7 @@ const submit = async (button) => {
 
 (async () => {
 
-    const statediv = document.querySelector('#state')
+    const statediv = document.getElementById('state')
 
 
     try {

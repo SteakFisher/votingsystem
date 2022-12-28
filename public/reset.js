@@ -23,7 +23,7 @@ const alertBox = (code, msg) => {
 }
 const reset = async (button) => {
     const mark = document.querySelector('mark')
-    const confirmText = document.querySelector('#confirmText')
+    const confirmText = document.getElementById('confirmText')
 
     if (confirmText.value != mark.innerText) return confirmText.classList.add('is-invalid')
 
@@ -36,6 +36,6 @@ const reset = async (button) => {
     })
     const data = res.text()
     const alert = alertBox(res.status, data)
-    const alertrow = document.querySelector('#alert-msg')
+    const alertrow = document.getElementById('alert-msg')
     alertrow.appendChild(alert)
 }
