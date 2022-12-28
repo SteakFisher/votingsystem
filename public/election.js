@@ -5,7 +5,18 @@ const colors = {
     "Mars": "danger",
     "Neptune": "success"
 }
+const codes = {
+    200: 'alert-success',
+    400: 'alert-danger',
+    500: 'alert-warning'
+}
 
+const createAlertDiv = (msg, code) => {
+    const div = document.createElement('div')
+    div.classList.add('alert', `${codes[code]}`)
+    div.innerText = msg
+    return div
+}
 const addElements = () => {
     const row = document.getElementById('houses')
     for (const house of houses) {
@@ -43,7 +54,7 @@ const check = (element) => {
         return false
     }
 }
-const upload = async () => {
+const upload = async (button) => {
     const data = new FormData()
     const quotes = {
 
@@ -81,7 +92,16 @@ const upload = async () => {
             method: "POST",
             body: data
         })
-        console.log(res)
+        const { msg, errors } = await res.json()
+        button.remove()
+        const stateDiv = document.getElementById('state')
+        const msgDiv = createAlertDiv(msg, res.status)
+        stateDiv.appendChild(msgDiv)
+        if (errors) {
+            errorsDiv = createAlertDiv(errors, 500)
+            stateDiv.appendChild(errorsDiv)
+        }
+
     }
 
 }

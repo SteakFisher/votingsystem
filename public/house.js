@@ -37,10 +37,14 @@ const upload = async (button) => {
             method: "POST",
             body: formdata
         })
-        const msg = await res.text()
+        const { msg, errors } = await res.json()
         const alertDiv = createAlertDiv(msg, res.status)
         const stateDiv = document.getElementById('state')
         stateDiv.appendChild(alertDiv)
+        if (errors) {
+            const errorsDiv = createAlertDiv(`Errors:${errors.toString()}`, 500)
+            state.appendChild(errorsDiv)
+        }
     }
 
 }

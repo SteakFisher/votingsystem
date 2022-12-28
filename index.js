@@ -148,18 +148,21 @@ app.post('/admin/house', async (req, res) => {
     const files = req.files
 
     const fileKeys = Object.keys(req.files)
-
+    const errors = []
     for (const key of fileKeys) {
         const file = files[key]
         const dest = path.join(__dirname, 'Scraper', file.name)
         file.mv(dest, (err) => {
-            if (err) console.log(err) // Error 
+            if (err) {
+                errors.push(err.message)
+                console.log(err)
+            } // Error 
         })
     }
-    const [students, errors] = structureData(getData(`./Scraper/${files.usernames.name}`),
+    const [students, scraperErrors] = structureData(getData(`./Scraper/${files.usernames.name}`),
         getData(`./Scraper/${files.houselist.name}`))
-
-    res.send({ msg: 'Works', errors })
+    errors.concat(scraperErrors)
+    res.send({ msg: 'Success', errors: errors.toString() })
     for (const student of students) {
         await addUser(student)
     }
@@ -197,11 +200,15 @@ app.post('/admin/election', (req, res) => {
     const { state, quotes } = req.body
     if (!state && !quotes) return res.sendStatus(400)
     if (!adminStates.includes(state)) return res.sendStatus(403)
+    const errors = []
 
     savedQuotes = quotes
 
     fs.writeFile('./public/quotes.json', JSON.stringify(quotes), (err) => {
-        if (err) console.log(err)
+        if (err) {
+            errors.push(err.message)
+            console.log(err)
+        }
     })
 
     const files = req.files
@@ -211,11 +218,14 @@ app.post('/admin/election', (req, res) => {
         const file = files[key]
         const dest = path.join(__dirname, 'public', 'Contestants', file.name)
         file.mv(dest, (err) => {
-            if (err) console.log(err) // Error 
+            if (err) {
+                errors.push(err.message)
+                console.log(err)
+            }
         })
     }
 
-    res.send('Details Updated')
+    res.send({ msg: 'Details Updated', errors })
 })
 
 
