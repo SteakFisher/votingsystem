@@ -54,13 +54,15 @@ app.get('/getHouse', async (req, res) => {
     if (state) {
         try {
             const house = await getHouse(state)
-            res.send({ house })
+            quoteA = savedQuotes[`${house}_Quote_A`]
+            quoteB = savedQuotes[`${house}_Quote_B`]
+            res.send({ house, quoteA, quoteB })
         } catch (error) {
             console.log(error)
-            res.status(500).send({ msg: 'Couldnt Fetch House' })
+            res.status(500).send({ error: `Couldn't Fetch House` })
         }
     }
-    else res.status(400).send({ msg: 'No State Provided' })
+    else res.status(400).send({ error: 'No State Provided' })
 })
 
 
