@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser')
 const fileUpload = require('express-fileupload');
 
 
-const { authMail, cookieSecret } = require('./Creds/Constants.json')
+const { admins, cookieSecret } = require('./Creds/Constants.json')
 const { getAuthLink } = require("./Authorization/getAuthLink.js")
 const { getAuthTokens } = require("./Authorization/getAuthTokens.js")
 
@@ -13,6 +13,7 @@ const { authenticateFirestore } = require("./Authorization/authenticateFirestore
 const { addVote } = require("./Utils/addVote.js")
 const { hasVoted } = require("./Utils/hasVoted.js")
 const { getHouse } = require("./Utils/getHouse.js")
+const { resetDb } = require("./Utils/resetDb")
 const { getData } = require("./Scraper/getData");
 const { structureData } = require("./Scraper/structureData");
 const { addUser } = require("./Utils/addUser");
@@ -106,22 +107,19 @@ app.get('/.well-known/microsoft-identity-association.json', async function (requ
     response.sendFile(path.join(process.cwd(), 'public', 'microsoft-identity-association.json'))
 })
 
-let adminState = '' // To Avoid Authencating the state again and again for subpage
+let adminStates = [] // To Avoid Authencating the state again and again for subpage
 
 app.get('/admin', async (req, res) => {
-    const state = req.query.state
+    const state = req.query.state || req.signedCookies.state
     if (!state) return res.redirect('/admin/login')
 
     const user = sessionUsers[state]
     if (!user) return res.status(500).send('No Session Found')
     try {
-        console.log(sessionUsers)
         const mail = user.email
-        console.log(mail)
-        console.log(authMail)
-        if (mail == authMail) {
-            adminState = state
-            res.sendFile(path.join(process.cwd(), 'public', 'admin.html'))
+        if (admins.includes(mail)) {
+            adminStates.push(state)
+            res.cookie('state', state, { signed: true }).sendFile(path.join(process.cwd(), 'public', 'admin.html'))
         }
         else res.sendStatus(401)
 
@@ -137,19 +135,48 @@ app.get('/admin/login', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'public', 'login.html'))
 })
 app.get('/admin/house', (req, res) => {
+    const state = req.signedCookies.state
+    if (!state) return res.sendStatus(401)
+    if (!adminStates.includes(state)) return res.sendStatus(403)
     res.sendFile(path.join(process.cwd(), 'public', 'house.html'))
 })
+app.get('/admin/reset', (req, res) => {
+    const state = req.signedCookies.state
+    if (!state) return res.sendStatus(401)
+    if (!adminStates.includes(state)) return res.sendStatus(403)
+    res.sendFile(path.join(process.cwd(), 'public', 'reset.html'))
+})
+app.delete('/admin/reset', async (req, res) => {
+    const state = req.body.state
+    if (!state) return res.sendStatus(401)
+    if (!adminStates.includes(state)) return res.sendStatus(403)
+    try {
+        await resetDb(db)
+        res.status(200).send('Database Resetted')
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error.message) // Sending the Error to them so they can directly report the error
+    }
+
+})
 app.get('/admin/election', (req, res) => {
+    const state = req.signedCookies.state
+    if (!state) return res.sendStatus(401)
+    if (!adminStates.includes(state)) return res.sendStatus(403)
     res.sendFile(path.join(process.cwd(), 'public', 'election.html'))
 })
 
 app.post('/admin/election', (req, res) => {
-    //Imp Endpoint cant let anyyone touyc
-    const quotes = req.body
+    const { state, quotes } = req.body
+    if (!state && !quotes) return res.sendStatus(400)
+    if (!adminStates.includes(state)) return res.sendStatus(403)
+
     savedQuotes = quotes
+
     fs.writeFile('./public/quotes.json', JSON.stringify(quotes), (err) => {
         if (err) console.log(err)
     })
+
     const files = req.files
     const fileKeys = Object.keys(req.files)
 
