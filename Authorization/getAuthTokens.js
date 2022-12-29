@@ -7,13 +7,18 @@ dotenv.config()
 
 module.exports = {
     getAuthTokens: function (state, app, redirect, sessionUsers) {
+        console.log('1st', state)
         return new Promise((resolve, reject) => {
             app.get('/microsoft/auth', async function (request, response) {
+
+                console.log('2nd', state)
                 try {
 
                     if (request.url.indexOf('/microsoft/auth') > -1) {
                         const qs = new URL(request.url, process.env.AUTH_REDIRECT).searchParams;
-
+                        if (qs.get("state") !== state) {
+                            response.send('State not Equal')
+                        }
                         if (qs.get("state") === state) {
                             const code = qs.get('code')
 
