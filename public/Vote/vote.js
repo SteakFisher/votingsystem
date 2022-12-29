@@ -43,7 +43,7 @@ const addVote = async (value) => {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            state: 3242342,
+            state: state,
             contestant: `contestant A`
         })
     })
