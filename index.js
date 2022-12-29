@@ -56,8 +56,8 @@ app.get('/getHouse', async (req, res) => {
         try {
             const user = sessionUsers[state]
             if (!user) return res.status(404).send({ error: 'No User Found' })
-            let house = await getHouse(user.email, db)
-            house = house.charAt(0).toUpperCase() + house.slice(1).toLowerCase()
+            const house = await getHouse(user.email, db)
+
             quoteA = savedQuotes[`${house}_Quote_A`]
             quoteB = savedQuotes[`${house}_Quote_B`]
             res.send({ house, quoteA, quoteB })
@@ -80,9 +80,12 @@ app.post('/addvote', async (req, res) => {
     if (state && contestant) {
         try {
             const user = sessionUsers[state]
+            console.log(sessionUsers)
+            if (!user) return res.status(404).send('Not Found')
+            console.log(user)
             const bool = await hasVoted(user, voted, db)
             if (!bool) {
-                const house = await getHouse(user)// We dont confirm the house
+                const house = await getHouse(user.email, db)// We dont confirm the house
                 await addVote(house, contestant, user, db, voted)
                 delete sessionUsers[state]
                 res.send('Vote Success')
