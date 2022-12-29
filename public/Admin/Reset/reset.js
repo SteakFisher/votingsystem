@@ -1,6 +1,6 @@
 const codes = {
     200: 'alert-success',
-    403: 'alert-danger',
+    401: 'alert-danger',
     500: 'alert-warning'
 }
 const genRandomString = (len) => {
@@ -19,7 +19,7 @@ const alertBox = (code, msg) => {
     const div = document.createElement('div')
     div.classList.add('alert', codes[code])
     div.innerText = msg
-    return alertBox
+    return div
 }
 const reset = async (button) => {
     const mark = document.querySelector('mark')
@@ -30,12 +30,15 @@ const reset = async (button) => {
     button.remove()
     const res = await fetch('/admin/reset', {
         method: 'DELETE',
-        body: {
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
             state: sessionStorage.state
-        }
+        })
     })
-    const data = res.text()
-    const alert = alertBox(res.status, data)
-    const alertrow = document.getElementById('alert-msg')
-    alertrow.appendChild(alert)
+    const data = await res.text()
+    const alertmsg = alertBox(res.status, data)
+    const alertrow = document.querySelector('#alert-msg')
+    alertrow.appendChild(alertmsg)
 }
