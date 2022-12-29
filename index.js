@@ -23,6 +23,7 @@ let savedQuotes = require('./public/quotes.json') // Quotes of Contestants
 let voted = [] // Array of emails of users who have voted
 
 let app = express()
+const db = authenticateFirestore();
 
 app.set('port', (process.env.PORT || 443))
 
@@ -53,13 +54,16 @@ app.get('/getHouse', async (req, res) => {
     const state = req.query.state
     if (state) {
         try {
-            const house = await getHouse(state)
+            const user = sessionUsers[state]
+            if (!user) return res.status(404).send({ error: 'No User Found' })
+            let house = await getHouse(user.email, db)
+            house = house.charAt(0).toUpperCase() + house.slice(1).toLowerCase()
             quoteA = savedQuotes[`${house}_Quote_A`]
             quoteB = savedQuotes[`${house}_Quote_B`]
             res.send({ house, quoteA, quoteB })
         } catch (error) {
             console.log(error)
-            res.status(500).send({ error: `Couldn't Fetch House` })
+            res.status(500).send({ error: error.message })
         }
     }
     else res.status(400).send({ error: 'No State Provided' })
@@ -67,7 +71,7 @@ app.get('/getHouse', async (req, res) => {
 
 
 app.get('/vote', async (req, res) => {
-    res.sendFile(path.join(process.cwd(), 'public', 'vote.html'))
+    res.sendFile(path.join(process.cwd(), 'public', 'Vote', 'vote.html'))
 })
 
 app.post('/addvote', async (req, res) => {
@@ -94,7 +98,7 @@ app.post('/addvote', async (req, res) => {
     } else res.status(400).send('Invalid Body')
 })
 app.get('/', async function (request, response) {
-    response.sendFile(path.join(process.cwd(), 'public', 'home.html'))
+    response.sendFile(path.join(process.cwd(), 'public', 'Home', 'home.html'))
 })
 
 app.get('/termsofservice', async function (request, response) {
@@ -121,7 +125,8 @@ app.get('/admin', async (req, res) => {
         const mail = user.email
         if (admins.includes(mail)) {
             adminStates.push(state)
-            res.cookie('state', state, { signed: true }).sendFile(path.join(process.cwd(), 'public', 'admin.html'))
+            res.cookie('state', state, { signed: true })
+                .sendFile(path.join(process.cwd(), 'public', 'Admin', 'admin.html'))
         }
         else res.sendStatus(401)
 
@@ -134,13 +139,13 @@ app.get('/admin', async (req, res) => {
 
 // Add Cookie Auth check whtever
 app.get('/admin/login', (req, res) => {
-    res.sendFile(path.join(process.cwd(), 'public', 'login.html'))
+    res.sendFile(path.join(process.cwd(), 'public', 'Admin', 'login.html'))
 })
 app.get('/admin/house', (req, res) => {
     const state = req.signedCookies.state
     if (!state) return res.sendStatus(401)
     if (!adminStates.includes(state)) return res.sendStatus(403)
-    res.sendFile(path.join(process.cwd(), 'public', 'house.html'))
+    res.sendFile(path.join(process.cwd(), 'public', 'Admin', 'House', 'house.html'))
 })
 app.post('/admin/house', async (req, res) => {
     const state = req.state
@@ -176,7 +181,7 @@ app.get('/admin/reset', (req, res) => {
     const state = req.signedCookies.state
     if (!state) return res.sendStatus(401)
     if (!adminStates.includes(state)) return res.sendStatus(403)
-    res.sendFile(path.join(process.cwd(), 'public', 'reset.html'))
+    res.sendFile(path.join(process.cwd(), 'public', 'Admin', 'Reset', 'reset.html'))
 })
 app.delete('/admin/reset', async (req, res) => {
     const state = req.body.state
@@ -195,7 +200,7 @@ app.get('/admin/election', (req, res) => {
     const state = req.signedCookies.state
     if (!state) return res.sendStatus(401)
     if (!adminStates.includes(state)) return res.sendStatus(403)
-    res.sendFile(path.join(process.cwd(), 'public', 'election.html'))
+    res.sendFile(path.join(process.cwd(), 'public', 'Admin', 'Election', 'election.html'))
 })
 
 app.post('/admin/election', (req, res) => {
@@ -232,7 +237,7 @@ app.post('/admin/election', (req, res) => {
 
 
 
-const db = authenticateFirestore();
+
 
 // Pass in a unique state string to prevent CSRF attacks, each user is identified by the state u pass in
 // getAuthLink('1234')
