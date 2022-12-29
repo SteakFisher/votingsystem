@@ -21,8 +21,6 @@ module.exports = {
         url.searchParams.append("response_mode", response_mode);
         url.searchParams.append("state", state);
 
-        console.log(url.toString());
-
         return url.toString();
     }
 }
