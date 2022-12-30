@@ -18,8 +18,12 @@ const { getData } = require("./Scraper/getData");
 const { structureData } = require("./Scraper/structureData");
 const { addUser } = require("./Utils/addUser");
 
+let states = [];
 let sessionUsers = {};
-let savedQuotes = require('./public/quotes.json') // Quotes of Contestants
+let savedQuotes = require('./public/quotes.json')
+const fetch = require("node-fetch");
+const Constants = require("./Creds/Constants.json");
+const {getUser} = require("./Utils/getUser"); // Quotes of Contestants
 let voted = [] // Array of emails of users who have voted
 
 let app = express()
@@ -32,8 +36,66 @@ app.use(cookieParser(cookieSecret))
 app.use(express.json())
 app.use(express.static('public'))
 
+
+
 app.listen(process.env.PORT || 443, function () {
     console.log('App is running, server is listening on port ', app.get('port'));
+})
+
+app.get('/microsoft/auth', async function (request, response) {
+    try {
+        if (request.url.indexOf('/microsoft/auth') > -1) {
+            const qs = new URL(request.url, process.env.AUTH_REDIRECT).searchParams;
+
+            const state = qs.get('state');
+
+            if (!(states.includes(String(state)))) {
+                response.send('State not Equal')
+            }
+            console.log(state)
+            console.log(states)
+
+            if (states.includes(String(state)) ) {
+                const code = qs.get('code')
+
+                const params = new URLSearchParams();
+                params.append("grant_type", "authorization_code");
+                params.append("code", code);
+                params.append("client_id", process.env.AZURE_CLIENT_ID);
+                params.append("redirect_uri", process.env.AUTH_REDIRECT);
+                params.append("client_secret", process.env.AZURE_CLIENT_SECRET);
+
+                fetch('https://login.microsoftonline.com/common/oauth2/v2.0/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'scope': Constants.scope,
+                    },
+                    body: params
+                })
+                    .then(res => res.json())
+                    .then(async json => {
+                        sessionUsers[state] = await getUser({
+                            access_token: json.access_token,
+                            refresh_token: json.refresh_token,
+                        })
+
+                        for(let i = 0; i < states.length; i++) {
+                            if(states[i] === state) {
+                                states.splice(i, 1);
+                            }
+                        }
+
+                        response.redirect(`/vote?state=${state}`)
+                        response.end();
+                    })
+            }
+        }
+    }
+    catch (e) {
+        console.log("Then WHAT?")
+        console.log(e)
+    }
 })
 
 app.get('/getLink', async (req, res) => {
@@ -43,8 +105,8 @@ app.get('/getLink', async (req, res) => {
     if (state && redirect) {
         const url = getAuthLink(state)
         res.send({ url })
-
-        await getAuthTokens(state, app, redirect, sessionUsers)
+        states.push(state)
+        // await getAuthTokens(state, app, redirect, sessionUsers)
 
     } else res.status(400).send('No State/Redirect Provided')
 
