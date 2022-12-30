@@ -29,8 +29,8 @@ const upload = async (button) => {
     }
     else {
         const formdata = new FormData()
-        formdata.append('usernames', usernames.files[0], usernames.files[0].name)
-        formdata.append('houselist', houselist.files[0], houselist.files[0].name)
+        formdata.append('usernames', usernames.files[0], usernames.files[0].name.replace(' ', '-'))
+        formdata.append('houselist', houselist.files[0], houselist.files[0].name.replace(' ', '-'))
         formdata.append('state', sessionStorage.state)
         button.remove()
         const res = await fetch('/admin/house', {
