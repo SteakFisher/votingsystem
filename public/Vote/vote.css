@@ -13,12 +13,10 @@ body {
 
 img{
     cursor:pointer;
-    
 }
 
 .font {
-    font-family: 'Bebas Neue', cursive;    
-   
+    font-family: 'Bebas Neue', cursive;  
 }
 
 input[type='radio']{

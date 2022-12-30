@@ -56,8 +56,6 @@ app.get('/microsoft/auth', async function (request, response) {
             if (!(states.includes(String(state)))) {
                 response.send('State not Equal')
             }
-            console.log(state)
-            console.log(states)
 
             if (states.includes(String(state))) {
                 const code = qs.get('code')
@@ -148,7 +146,6 @@ app.post('/addvote', async (req, res) => {
     if (state && contestant) {
         try {
             const user = sessionUsers[state]
-            console.log(sessionUsers)
             if (!user) return res.status(404).send('Not Found')
             console.log(user)
             const bool = await hasVoted(user, voted, db)

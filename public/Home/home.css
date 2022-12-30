@@ -17,17 +17,6 @@ body{
 .mt-10{
     margin-top: 10rem;
 }
-/* [class*="col"] {
-    border: 2px solid black;
-} */
-/* .arrow-down {
-    width: 0; 
-    height: 0; 
-    border-bottom: 12px solid transparent;
-    border-left: 12px solid transparent;
-    border-right: 12px solid transparent;  
-    border-top: 20px solid white;
-} */
 .font {
     font-family: 'Bebas Neue', cursive;
     color: white;
