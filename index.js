@@ -216,10 +216,9 @@ app.get('/admin/house', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'public', 'Admin', 'House', 'house.html'))
 })
 app.post('/admin/house', async (req, res) => {
-    const state = req.state
+    const state = req.body.state
     if (!state) return res.sendStatus(401)
     if (!adminStates.includes(state)) return res.sendStatus(403)
-
     const files = req.files
 
     const fileKeys = Object.keys(req.files)
@@ -234,14 +233,18 @@ app.post('/admin/house', async (req, res) => {
             } // Error 
         })
     }
-    const [students, scraperErrors] = structureData(getData(`./Scraper/${files.usernames.name}`),
-        getData(`./Scraper/${files.houselist.name}`))
+    const usernamesPath = `./Scraper/${files.usernames.name}`
+    const houseListPath = `./Scraper/${files.houselist.name}`
+
+    const [students, scraperErrors] = structureData(getData(usernamesPath),
+        getData(houseListPath))
     errors.concat(scraperErrors)
     res.send({ msg: 'Success', errors: errors.toString() })
     for (const student of students) {
         await addUser(student)
     }
-
+    fs.unlinkSync(usernamesPath)
+    fs.unlinkSync(houseListPath)
 
 
 })
