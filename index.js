@@ -1,4 +1,6 @@
 const express = require("express")
+const compression = require('compression')
+const fetch = require("node-fetch");
 const path = require("path")
 const fs = require('fs')
 const cookieParser = require('cookie-parser')
@@ -17,20 +19,22 @@ const { resetDb } = require("./Utils/resetDb")
 const { getData } = require("./Scraper/getData");
 const { structureData } = require("./Scraper/structureData");
 const { addUser } = require("./Utils/addUser");
+const { getUser } = require("./Utils/getUser");
+
+let savedQuotes = require('./public/quotes.json')
+const Constants = require("./Creds/Constants.json");
 
 let states = [];
+let redirects = {}
 let sessionUsers = {};
-let savedQuotes = require('./public/quotes.json')
-const fetch = require("node-fetch");
-const Constants = require("./Creds/Constants.json");
-const {getUser} = require("./Utils/getUser"); // Quotes of Contestants
-let voted = [] // Array of emails of users who have voted
+let voted = []
 
 let app = express()
 const db = authenticateFirestore();
 
 app.set('port', (process.env.PORT || 443))
 
+app.use(compression())
 app.use(fileUpload({ useTempFiles: true }));
 app.use(cookieParser(cookieSecret))
 app.use(express.json())
@@ -55,7 +59,7 @@ app.get('/microsoft/auth', async function (request, response) {
             console.log(state)
             console.log(states)
 
-            if (states.includes(String(state)) ) {
+            if (states.includes(String(state))) {
                 const code = qs.get('code')
 
                 const params = new URLSearchParams();
@@ -80,14 +84,15 @@ app.get('/microsoft/auth', async function (request, response) {
                             refresh_token: json.refresh_token,
                         })
 
-                        for(let i = 0; i < states.length; i++) {
-                            if(states[i] === state) {
+                        for (let i = 0; i < states.length; i++) {
+                            if (states[i] === state) {
                                 states.splice(i, 1);
                             }
                         }
 
-                        response.redirect(`/vote?state=${state}`)
+                        response.redirect(`/${redirects[state]}?state=${state}`)
                         response.end();
+                        delete redirects[state]
                     })
             }
         }
@@ -103,6 +108,7 @@ app.get('/getLink', async (req, res) => {
     const state = req.query.state
     const redirect = req.query.redirect
     if (state && redirect) {
+        redirects[state] = redirect
         const url = getAuthLink(state)
         res.send({ url })
         states.push(state)
