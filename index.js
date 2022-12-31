@@ -23,6 +23,7 @@ const { getUser } = require("./Utils/getUser");
 
 let savedQuotes = require('./public/quotes.json')
 const Constants = require("./Creds/Constants.json");
+const {getVoteData} = require("./Utils/getVoteData");
 
 let states = [];
 let redirects = {}
@@ -384,3 +385,5 @@ app.post('/admin/election', (req, res) => {
 // addUsers().then(r => console.log('Done'))
 
 // getHouse('jayadeep.c_oob@gemselearning.com', db)
+
+getVoteData(db)
