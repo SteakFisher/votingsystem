@@ -1,311 +1,59 @@
 const express = require("express")
 const compression = require('compression')
-const fetch = require("node-fetch");
-const path = require("path")
-const fs = require('fs')
 const cookieParser = require('cookie-parser')
 const fileUpload = require('express-fileupload');
 
+const { cookieSecret } = require('./Creds/Constants.json')
 
-const { admins, cookieSecret } = require('./Creds/Constants.json')
-const { getAuthLink } = require("./Authorization/getAuthLink.js")
-const { getAuthTokens } = require("./Authorization/getAuthTokens.js")
-
-const { authenticateFirestore } = require("./Authorization/authenticateFirestore.js")
-const { addVote } = require("./Utils/addVote.js")
-const { hasVoted } = require("./Utils/hasVoted.js")
-const { getHouse } = require("./Utils/getHouse.js")
-const { resetDb } = require("./Utils/resetDb")
-const { getData } = require("./Scraper/getData");
-const { structureData } = require("./Scraper/structureData");
-const { addUser } = require("./Utils/addUser");
-const { getUser } = require("./Utils/getUser");
-
-let savedQuotes = require('./public/quotes.json')
-const Constants = require("./Creds/Constants.json");
-
-let states = [];
-let redirects = {}
-let sessionUsers = {};
-let voted = []
+// Routes
+// Prolly a shorter way to do this but /shrug
+const files = require('./Routes/files')
+const getLink = require('./Routes/getLink')
+const getHouse = require('./Routes/getHouse')
+const addVote = require('./Routes/addVote')
+const admin = require('./Routes/Admin/admin')
+const adminHouse = require('./Routes/Admin/house')
+const adminElection = require('./Routes/Admin/election')
+const adminReset = require('./Routes/Admin/reset')
+const microsoftAuth = require('./Routes/microsoftAuth')
 
 let app = express()
-const db = authenticateFirestore();
 
 app.set('port', (process.env.PORT || 443))
-
 app.use(compression())
 app.use(fileUpload({ useTempFiles: true }));
 app.use(cookieParser(cookieSecret))
 app.use(express.json())
 app.use(express.static('public'))
 
-
-
 app.listen(process.env.PORT || 443, function () {
     console.log('App is running, server is listening on port ', app.get('port'));
 })
 
-app.get('/microsoft/auth', async function (request, response) {
-    try {
-        if (request.url.indexOf('/microsoft/auth') > -1) {
-            const qs = new URL(request.url, process.env.AUTH_REDIRECT).searchParams;
+app.use('/microsoft/auth', microsoftAuth)
+app.use('/getLink', getLink)
+app.use('/getHouse', getHouse)
+app.use('/addVote', addVote)
+app.use('/admin', admin)
+app.get('/admin/house', adminHouse)
+app.use('/admin/election', adminElection)
+app.use('/admin/reset', adminReset)
+app.use('/', files)
 
-            const state = qs.get('state');
+// Deleted getAuthTokens
 
-            if (!(states.includes(String(state)))) {
-                response.send('State not Equal')
-            }
+// All Endpoints have their own files
+// Made util.js which exports all the functions in Util cuz im too lazy to import every file seperately
+// Made cache.js and put the global variables in there so they be accessed in the Route code
+// Needs Testing
+// Code looks clean ig but shitton of folders
 
-            if (states.includes(String(state))) {
-                const code = qs.get('code')
+// Add this to the Wiki
+// House Pictures need to be 500x500 for new elections
+// Could prolly use a library to do that but no.
 
-                const params = new URLSearchParams();
-                params.append("grant_type", "authorization_code");
-                params.append("code", code);
-                params.append("client_id", process.env.AZURE_CLIENT_ID);
-                params.append("redirect_uri", process.env.AUTH_REDIRECT);
-                params.append("client_secret", process.env.AZURE_CLIENT_SECRET);
-
-                fetch('https://login.microsoftonline.com/common/oauth2/v2.0/token', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'scope': Constants.scope,
-                    },
-                    body: params
-                })
-                    .then(res => res.json())
-                    .then(async json => {
-                        sessionUsers[state] = await getUser({
-                            access_token: json.access_token,
-                            refresh_token: json.refresh_token,
-                        })
-
-                        for (let i = 0; i < states.length; i++) {
-                            if (states[i] === state) {
-                                states.splice(i, 1);
-                            }
-                        }
-
-                        response.redirect(`/${redirects[state]}?state=${state}`)
-                        response.end();
-                        delete redirects[state]
-                    })
-            }
-        }
-    }
-    catch (e) {
-        console.log("Then WHAT?")
-        console.log(e)
-    }
-})
-
-app.get('/getLink', async (req, res) => {
-
-    const state = req.query.state
-    const redirect = req.query.redirect
-    if (state && redirect) {
-        redirects[state] = redirect
-        const url = getAuthLink(state)
-        res.send({ url })
-        states.push(state)
-        // await getAuthTokens(state, app, redirect, sessionUsers)
-
-    } else res.status(400).send('No State/Redirect Provided')
-
-})
-
-app.get('/getHouse', async (req, res) => {
-    const state = req.query.state
-    if (state) {
-        try {
-            const user = sessionUsers[state]
-            if (!user) return res.status(404).send({ error: 'No User Found' })
-            const house = await getHouse(user.email, db)
-
-            quoteA = savedQuotes[`${house}_Quote_A`]
-            quoteB = savedQuotes[`${house}_Quote_B`]
-            res.send({ house, quoteA, quoteB })
-        } catch (error) {
-            console.log(error)
-            res.status(500).send({ error: error.message })
-        }
-    }
-    else res.status(400).send({ error: 'No State Provided' })
-})
-
-
-app.get('/vote', async (req, res) => {
-    res.sendFile(path.join(process.cwd(), 'public', 'Vote', 'vote.html'))
-})
-
-app.post('/addvote', async (req, res) => {
-    const { state, contestant } = req.body // Need to send house aswell
-
-    if (state && contestant) {
-        try {
-            const user = sessionUsers[state]
-            if (!user) return res.status(404).send('Not Found')
-            console.log(user)
-            const bool = await hasVoted(user, voted, db)
-            if (!bool) {
-                const house = await getHouse(user.email, db)// We dont confirm the house
-                await addVote(house, contestant, user, db, voted)
-                delete sessionUsers[state]
-                res.send('Vote Success')
-            }
-
-            else res.status(403).send('Not Again')
-
-        } catch (error) {
-            console.log(error)
-            res.status(500).send('Server errrrrrrr')
-        }
-
-    } else res.status(400).send('Invalid Body')
-})
-app.get('/', async function (request, response) {
-    response.sendFile(path.join(process.cwd(), 'public', 'Home', 'home.html'))
-})
-
-app.get('/termsofservice', async function (request, response) {
-    response.sendFile(path.join(process.cwd(), 'public', 'termsofservice.html'))
-})
-
-app.get('/privacystatement', async function (request, response) {
-    response.sendFile(path.join(process.cwd(), 'public', 'privacystatement.html'))
-})
-
-app.get('/.well-known/microsoft-identity-association.json', async function (request, response) {
-    response.sendFile(path.join(process.cwd(), 'public', 'microsoft-identity-association.json'))
-})
-
-let adminStates = [] // To Avoid Authencating the state again and again for subpage
-
-app.get('/admin', async (req, res) => {
-    const state = req.query.state || req.signedCookies.state
-    if (!state) return res.redirect('/admin/login')
-
-    const user = sessionUsers[state]
-    if (!user) return res.status(500).send('No Session Found')
-    try {
-        const mail = user.email
-        if (admins.includes(mail)) {
-            adminStates.push(state)
-            res.cookie('state', state, { signed: true })
-                .sendFile(path.join(process.cwd(), 'public', 'Admin', 'admin.html'))
-        }
-        else res.sendStatus(401)
-
-    } catch (error) {
-        res.sendStatus(500)
-        console.log(error)
-    }
-
-})
-
-// Add Cookie Auth check whtever
-app.get('/admin/login', (req, res) => {
-    res.sendFile(path.join(process.cwd(), 'public', 'Admin', 'login.html'))
-})
-app.get('/admin/house', (req, res) => {
-    const state = req.signedCookies.state
-    if (!state) return res.sendStatus(401)
-    if (!adminStates.includes(state)) return res.sendStatus(403)
-    res.sendFile(path.join(process.cwd(), 'public', 'Admin', 'House', 'house.html'))
-})
-app.post('/admin/house', async (req, res) => {
-    const state = req.body.state
-    if (!state) return res.sendStatus(401)
-    if (!adminStates.includes(state)) return res.sendStatus(403)
-    const files = req.files
-
-    const fileKeys = Object.keys(req.files)
-    const errors = []
-    for (const key of fileKeys) {
-        const file = files[key]
-        const dest = path.join(__dirname, 'Scraper', file.name)
-        file.mv(dest, (err) => {
-            if (err) {
-                errors.push(err.message)
-                console.log(err)
-            } // Error 
-        })
-    }
-    const usernamesPath = `./Scraper/${files.usernames.name}`
-    const houseListPath = `./Scraper/${files.houselist.name}`
-
-    const [students, scraperErrors] = structureData(getData(usernamesPath),
-        getData(houseListPath))
-    errors.concat(scraperErrors)
-    res.send({ msg: 'Success', errors: errors.toString() })
-    for (const student of students) {
-        await addUser(student)
-    }
-    fs.unlinkSync(usernamesPath)
-    fs.unlinkSync(houseListPath)
-
-
-})
-app.get('/admin/reset', (req, res) => {
-    const state = req.signedCookies.state
-    if (!state) return res.sendStatus(401)
-    if (!adminStates.includes(state)) return res.sendStatus(403)
-    res.sendFile(path.join(process.cwd(), 'public', 'Admin', 'Reset', 'reset.html'))
-})
-app.delete('/admin/reset', async (req, res) => {
-    const state = req.body.state
-    if (!state) return res.sendStatus(401)
-    if (!adminStates.includes(state)) return res.sendStatus(403)
-    try {
-        await resetDb(db)
-        res.status(200).send('Database Resetted')
-    } catch (error) {
-        console.log(error)
-        res.status(500).send(error.message) // Sending the Error to them so they can directly report the error
-    }
-
-})
-app.get('/admin/election', (req, res) => {
-    const state = req.signedCookies.state
-    if (!state) return res.sendStatus(401)
-    if (!adminStates.includes(state)) return res.sendStatus(403)
-    res.sendFile(path.join(process.cwd(), 'public', 'Admin', 'Election', 'election.html'))
-})
-
-app.post('/admin/election', (req, res) => {
-    const { state, quotes } = req.body
-    if (!state && !quotes) return res.sendStatus(400)
-    if (!adminStates.includes(state)) return res.sendStatus(403)
-    const errors = []
-
-    savedQuotes = quotes
-
-    fs.writeFile('./public/quotes.json', JSON.stringify(quotes), (err) => {
-        if (err) {
-            errors.push(err.message)
-            console.log(err)
-        }
-    })
-
-    const files = req.files
-    const fileKeys = Object.keys(req.files)
-
-    for (const key of fileKeys) {
-        const file = files[key]
-        const dest = path.join(__dirname, 'public', 'Contestants', file.name)
-        file.mv(dest, (err) => {
-            if (err) {
-                errors.push(err.message)
-                console.log(err)
-            }
-        })
-    }
-
-    res.send({ msg: 'Details Updated', errors })
-})
-
+// We add some library that compiles the html css and js and sends it to the client
+// if it exist
 
 
 

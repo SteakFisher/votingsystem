@@ -1,8 +1,8 @@
 const fetch = require('node-fetch');
 const Constants = require('../Creds/Constants.json');
 
-module.exports = {
-    getUser: async function (authObj) {
+module.exports =
+    async function (authObj) {
         // I LOVE copilot
 
         return await fetch(`https://graph.microsoft.com/beta/me`, {
@@ -25,5 +25,5 @@ module.exports = {
                 }
             })
     }
-}
+
 
