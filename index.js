@@ -132,3 +132,5 @@ app.use('/', files)
 // addUsers().then(r => console.log('Done'))
 
 // getHouse('jayadeep.c_oob@gemselearning.com', db)
+
+getVoteData(db)
