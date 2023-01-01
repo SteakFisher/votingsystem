@@ -1,3 +1,4 @@
+const path = require('path')
 const fs = require('fs')
 const { Router } = require('express')
 const { getData } = require('../../Scraper/getData')
