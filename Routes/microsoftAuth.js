@@ -1,3 +1,4 @@
+const fetch = require('node-fetch')
 const { Router } = require('express')
 const Constants = require('../Creds/Constants.json')
 const { getUser } = require('../Utils/util.js')

@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { sessionUsers } = require("../Utils/cache")
+const { sessionUsers, voted, db } = require("../Utils/cache")
 const { hasVoted, getHouse, addUser } = require('../Utils/util')
 const router = Router()
 
@@ -10,7 +10,6 @@ router.post('/', async (req, res) => {
         try {
             const user = sessionUsers[state]
             if (!user) return res.status(404).send('Not Found')
-            console.log(user)
             const bool = await hasVoted(user, voted, db)
             if (!bool) {
                 const house = await getHouse(user.email, db)
@@ -19,7 +18,7 @@ router.post('/', async (req, res) => {
                 res.send('Vote Success')
             }
 
-            else res.status(403).send('Not Again')
+            else res.status(403).send('You have already voted')
 
         } catch (error) {
             console.log(error)

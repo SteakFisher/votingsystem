@@ -1,6 +1,6 @@
 const { Router } = require('express')
-const { getHouse } = require('../Utils/getHouse')
-const { sessionUsers, savedQuotes } = require("../Utils/cache")
+const { getHouse } = require('../Utils/util')
+const { sessionUsers, savedQuotes, db } = require("../Utils/cache")
 
 const router = Router()
 
