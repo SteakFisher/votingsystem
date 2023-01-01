@@ -51,6 +51,7 @@ const addVote = async (value) => {
 
     loadingdiv.remove()
     statediv.appendChild(createAlertDiv(msg, res.status))
+    if (res.status == 200) sessionStorage.removeItem('state')
 
 }
 const submit = async (button) => {
