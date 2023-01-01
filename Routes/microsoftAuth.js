@@ -1,12 +1,13 @@
 const { Router } = require('express')
 const Constants = require('../Creds/Constants.json')
+const { getUser } = require('../Utils/util.js')
 const { sessionUsers, states, redirects } = require("../Utils/cache")
 
 const router = Router()
 
-router.get('/', async (req, res) => {
+router.get('/', async (request, response) => {
     // request.url is /?code...... use req.baseUrl
-    const reqUrl = req.baseUrl + req.url
+    const reqUrl = request.baseUrl + request.url
 
 
     try {

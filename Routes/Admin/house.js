@@ -1,3 +1,4 @@
+const fs = require('fs')
 const { Router } = require('express')
 const { getData } = require('../../Scraper/getData')
 const { structureData } = require('../../Scraper/structureData')
