@@ -16,6 +16,7 @@ const adminHouse = require('./Routes/Admin/house')
 const adminElection = require('./Routes/Admin/election')
 const adminReset = require('./Routes/Admin/reset')
 const microsoftAuth = require('./Routes/microsoftAuth')
+const adminData = require('./Routes/Admin/data')
 
 let app = express()
 
@@ -38,6 +39,7 @@ app.use('/admin', admin)
 app.get('/admin/house', adminHouse)
 app.use('/admin/election', adminElection)
 app.use('/admin/reset', adminReset)
+app.use('/admin/data', adminData)
 app.use('/', files)
 
 // Deleted getAuthTokens
@@ -132,5 +134,3 @@ app.use('/', files)
 // addUsers().then(r => console.log('Done'))
 
 // getHouse('jayadeep.c_oob@gemselearning.com', db)
-
-getVoteData(db)
