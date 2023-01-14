@@ -4,15 +4,12 @@ const Constants = require('../Creds/Constants.json')
 const { getUser } = require('../Utils/util.js')
 const { sessionUsers, states, redirects } = require("../Utils/cache")
 
-const router = Router()
-
-router.get('/', async (request, response) => {
+export default function microsoftAuth(request, response) {
     // request.url is /?code...... use req.baseUrl
     const reqUrl = request.baseUrl + request.url
 
-
     try {
-        if (reqUrl.indexOf('/microsoft/auth') > -1) {
+        if (reqUrl.indexOf('/microsoftAuth') > -1) {
             const qs = new URL(reqUrl, process.env.AUTH_REDIRECT).searchParams;
 
             const state = qs.get('state');
@@ -63,6 +60,5 @@ router.get('/', async (request, response) => {
         console.log("Then WHAT?")
         console.log(e)
     }
-})
+}
 
-module.exports = router
