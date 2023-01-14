@@ -3,10 +3,8 @@ const { Router } = require('express')
 
 const { getAuthLink } = require('../Authorization/getAuthLink')
 
+export default function getLink(req, res) {
 
-const router = Router()
-
-router.get('/', (req, res) => {
     const state = req.query.state
     const redirect = req.query.redirect || 'vote'
     if (state) {
@@ -16,6 +14,6 @@ router.get('/', (req, res) => {
         states.push(state)
 
     } else res.status(400).send('No State Provided')
-})
 
-module.exports = router
+
+}
