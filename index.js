@@ -5,18 +5,18 @@ const fileUpload = require('express-fileupload');
 
 const { cookieSecret } = require('./Creds/Constants.json')
 
-// Routes
+// api
 // Prolly a shorter way to do this but /shrug
-const files = require('./Routes/files')
-const getLink = require('./Routes/getLink')
-const getHouse = require('./Routes/getHouse')
-const addVote = require('./Routes/addVote')
-const admin = require('./Routes/Admin/admin')
-const adminHouse = require('./Routes/Admin/house')
-const adminElection = require('./Routes/Admin/election')
-const adminReset = require('./Routes/Admin/reset')
-const microsoftAuth = require('./Routes/microsoftAuth')
-const adminData = require('./Routes/Admin/data')
+const files = require('./api/files')
+const getLink = require('./api/getLink')
+const getHouse = require('./api/getHouse')
+const addVote = require('./api/addVote')
+const admin = require('./api/Admin/admin')
+const adminHouse = require('./api/Admin/house')
+const adminElection = require('./api/Admin/election')
+const adminReset = require('./api/Admin/reset')
+const microsoftAuth = require('./api/microsoftAuth')
+const adminData = require('./api/Admin/data')
 
 let app = express()
 
