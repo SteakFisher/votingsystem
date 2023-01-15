@@ -1,4 +1,4 @@
-const { redirects, states } = require("../Utils/cache")
+const { redirects, addState } = require("../Utils/cache")
 const { Router } = require('express')
 
 const { getAuthLink } = require('../Authorization/getAuthLink')
@@ -11,7 +11,7 @@ export default function getLink(req, res) {
         redirects[state] = redirect
         const url = getAuthLink(state)
         res.send({ url })
-        states.push(state)
+        addState(state)
 
     } else res.status(400).send('No State Provided')
 

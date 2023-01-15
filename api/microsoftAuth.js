@@ -2,7 +2,7 @@ const fetch = require('node-fetch')
 const { Router } = require('express')
 const Constants = require('../Creds/Constants.json')
 const { getUser } = require('../Utils/util.js')
-const { sessionUsers, states, redirects } = require("../Utils/cache")
+const { sessionUsers, getStates, redirects } = require("../Utils/cache")
 
 export default function microsoftAuth(request, response) {
     // request.url is /?code...... use req.baseUrl
@@ -11,7 +11,7 @@ export default function microsoftAuth(request, response) {
     try {
         if (reqUrl.indexOf('/microsoftAuth') > -1) {
             const qs = new URL(reqUrl, process.env.AUTH_REDIRECT).searchParams;
-
+            const states = getStates();
             const state = qs.get('state');
 
             if (!(states.includes(String(state)))) {
