@@ -4,7 +4,6 @@ const { sessionUsers, savedQuotes, db } = require("../Utils/cache")
 
 const router = Router()
 
-
 router.get('/', async (req, res) => {
     const state = req.query.state
     if (state) {
