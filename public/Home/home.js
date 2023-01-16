@@ -20,7 +20,7 @@ const login = async () => {
     const state = Math.floor(Math.random() * 9999999)
     sessionStorage.state = state
     const { url } = await (
-        await fetch(`/api/getLink?state=${state}&redirect=vote`)
+        await fetch(`/getLink?state=${state}&redirect=vote`)
     ).json()
     location = url
 }
