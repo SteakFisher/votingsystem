@@ -15,7 +15,7 @@ export default function microsoftAuth(request, response) {
             const state = qs.get('state');
 
             if (!(states.includes(String(state)))) {
-                response.send(states)
+                response.send('State not Equal')
             }
 
             if (states.includes(String(state))) {
