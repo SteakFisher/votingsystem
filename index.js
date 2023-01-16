@@ -8,12 +8,14 @@ const { cookieSecret } = require('./Creds/Constants.json')
 // api
 // Prolly a shorter way to do this but /shrug
 const files = require('./api/files')
+const getLink = require('./api/getLink')
 const getHouse = require('./api/getHouse')
 const addVote = require('./api/addVote')
 const admin = require('./api/Admin/admin')
 const adminHouse = require('./api/Admin/house')
 const adminElection = require('./api/Admin/election')
 const adminReset = require('./api/Admin/reset')
+const microsoftAuth = require('./api/microsoftAuth')
 const adminData = require('./api/Admin/data')
 
 let app = express()
@@ -29,6 +31,8 @@ app.listen(process.env.PORT || 443, function () {
     console.log('App is running, server is listening on port ', app.get('port'));
 })
 
+app.use('/microsoft/auth', microsoftAuth)
+app.use('/getLink', getLink)
 app.use('/getHouse', getHouse)
 app.use('/addVote', addVote)
 app.use('/admin', admin)
