@@ -2,7 +2,7 @@ const path = require('path')
 const { Router } = require('express')
 
 const { getVoteData } = require('../../Utils/util')
-const { adminStates, db } = require("../../Utils/cache")
+const { adminStates, db, contestants } = require("../../Utils/cache")
 const router = Router()
 
 router.get('/', async (req, res) => {
@@ -16,22 +16,23 @@ router.get('/getData', async (req, res) => {
     const state = req.signedCookies.state
     if (!state) return res.sendStatus(401)
     if (!adminStates.includes(state)) return res.sendStatus(403)
-    const data = await getVoteData(db)
+    const voteData = await getVoteData(db)
+    const details = contestants.getDetails()
 
-    // To remove the array of emails
-    // Would be a shitton of data which isn't used for now
-    // Idk if there's a better way to do this 
-    const voteCount = {}
+    const data = {}
     const houses = ['Jupiter', 'Mars', 'Saturn', 'Neptune']
+
     for (const house of houses) {
-        voteCount[house] = {}
-        for (key of Object.keys(data[house])) {
-            if (key.includes('count')) {
-                voteCount[house][key] = data[house][key]
-            }
-        }
+        data[house] = {}
+        data[house]['countA'] = voteData[house]['contestant A count']
+        data[house]['countB'] = voteData[house]['contestant B count']
+        data[house]['nameA'] = details[`${house}_Name_A`]
+        data[house]['nameB'] = details[`${house}_Name_B`]
+
+
     }
-    res.send(voteCount)
+
+    res.send(data)
 })
 
 module.exports = router
