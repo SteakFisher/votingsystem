@@ -1,6 +1,6 @@
 const path = require('path')
 const { Router } = require('express')
-const { adminStates, sessionUsers } = require("../../Utils/cache")
+const { adminStates, sessionUsers, contestants } = require("../../Utils/cache")
 const fs = require('fs')
 const router = Router()
 
@@ -12,22 +12,24 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    const { state, quotes } = req.body
-    if (!state && !quotes) return res.sendStatus(400)
+    const { details, state } = req.body
+    if (!state && !quotes && !names) return res.sendStatus(400)
     if (!adminStates.includes(state)) return res.sendStatus(403)
     const user = sessionUsers[state]
     if (!user) return res.sendStatus(500)
 
     const errors = []
 
-    savedQuotes = quotes // THis is problem
+    contestants.setDetails(JSON.parse(details))
 
-    fs.writeFile('../public/quotes.json', JSON.stringify(quotes), (err) => {
-        if (err) {
-            errors.push(err.message)
-            console.log(err)
-        }
-    })
+
+    fs.writeFile(path.join(process.cwd(), 'public', 'contestants.json')
+        , details, (err) => {
+            if (err) {
+                errors.push(err.message)
+                console.log(err)
+            }
+        })
 
     const files = req.files
     const fileKeys = Object.keys(req.files)

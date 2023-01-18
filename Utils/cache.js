@@ -2,10 +2,19 @@ const { authenticateFirestore } = require("../Authorization/authenticateFirestor
 
 module.exports = {
     db: authenticateFirestore(),
-    savedQuotes: require('../public/quotes.json'),
+    contestants: {
+        details: require('../public/contestants.json'),
+        getDetails() {
+            return this.details
+        },
+        setDetails(updated) {
+            this.details = updated
+        }
+    },
     adminStates: [],
     states: [],
     redirects: {},
     sessionUsers: {},
     voted: [],
 }
+

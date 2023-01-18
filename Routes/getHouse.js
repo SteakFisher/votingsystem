@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const { getHouse } = require('../Utils/util')
-const { sessionUsers, savedQuotes, db } = require("../Utils/cache")
+const { sessionUsers, contestants, db } = require("../Utils/cache")
 
 const router = Router()
 
@@ -12,8 +12,8 @@ router.get('/', async (req, res) => {
             if (!user) return res.status(404).send({ error: 'No User Found' })
             const house = await getHouse(user.email, db)
 
-            quoteA = savedQuotes[`${house}_Quote_A`]
-            quoteB = savedQuotes[`${house}_Quote_B`]
+            quoteA = contestants.getDetails()[`${house}_Quote_A`]
+            quoteB = contestants.getDetails()[`${house}_Quote_B`]
             res.send({ house, quoteA, quoteB })
         } catch (error) {
             console.log(error)
