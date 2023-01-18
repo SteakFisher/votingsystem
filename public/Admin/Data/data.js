@@ -20,8 +20,8 @@ const createGraph = (house, data) => {
             legendText: "{label} cus",
             indexLabel: "{label}: #percent%",
             dataPoints: [
-                { label: "Contestant A", y: data['contestant A count'] },
-                { label: "Contestant B", y: data['contestant B count'] },
+                { label: data['nameA'], y: data['countA'] },
+                { label: data['nameB'], y: data['countB'] },
             ]
         }]
     };
@@ -38,21 +38,8 @@ window.onload = async () => {
 
 }
 // {
-//     Jupiter: {
-//       'contestant B count': 0,
-//       'contestant A count': 1
-//     },
-//     Mars: {
-//       'contestant A count': 0,
-//       'contestant B count': 0
-//     },
-//     Saturn: {
-//       'contestant B count': 0,
-//       'contestant A count': 0,
-//
-//     },
-//     Neptune: {
-//       'contestant A count': 0,
-//       'contestant B count': 0
-//     }
+//     Jupiter: { countA: 1, countB: 0, nameA: 'Joel', nameB: 'Sir' },
+//     Mars: { countA: 0, countB: 0, nameA: 'Adith', nameB: 'they' },
+//     Saturn: { countA: 0, countB: 0, nameA: 'Sunit', nameB: 'maam' },
+//     Neptune: { countA: 0, countB: 0, nameA: 'Kaisd', nameB: 'Thes' }
 //   }
